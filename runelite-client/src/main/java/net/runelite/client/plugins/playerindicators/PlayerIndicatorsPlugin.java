@@ -161,7 +161,9 @@ public class PlayerIndicatorsPlugin extends Plugin
 			}
 			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != -1)
 			{
+
 				color = config.getHittablePlayerColor();
+				log.debug(player.getName() + " is getting colored to " + color.toString());
 			}
 
 			if (image != -1 || color != null)
