@@ -29,19 +29,27 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.runelite.api.ClanMemberRank;
-import net.runelite.api.Player;
-import net.runelite.api.Point;
+
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.*;
+import net.runelite.api.Client;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.game.ClanManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.util.Text;
+import net.runelite.client.util.WildernessUtils;
 
 @Singleton
+@Slf4j
 public class PlayerIndicatorsOverlay extends Overlay
 {
 	private static final int ACTOR_OVERHEAD_TEXT_MARGIN = 40;
@@ -50,6 +58,9 @@ public class PlayerIndicatorsOverlay extends Overlay
 	private final PlayerIndicatorsService playerIndicatorsService;
 	private final PlayerIndicatorsConfig config;
 	private final ClanManager clanManager;
+
+	@Inject
+	private Client client;
 
 	@Inject
 	private PlayerIndicatorsOverlay(PlayerIndicatorsConfig config, PlayerIndicatorsService playerIndicatorsService,
@@ -61,6 +72,7 @@ public class PlayerIndicatorsOverlay extends Overlay
 		setPosition(OverlayPosition.DYNAMIC);
 		setPriority(OverlayPriority.MED);
 	}
+
 
 	@Override
 	public Dimension render(Graphics2D graphics)
@@ -88,7 +100,8 @@ public class PlayerIndicatorsOverlay extends Overlay
 				zOffset = actor.getLogicalHeight() + ACTOR_OVERHEAD_TEXT_MARGIN;
 		}
 
-		final String name = Text.sanitize(actor.getName());
+		String name = Text.sanitize(actor.getName());
+
 		Point textLocation = actor.getCanvasTextLocation(graphics, name, zOffset);
 
 		if (drawPlayerNamesConfig == PlayerNameLocation.MODEL_RIGHT)
@@ -142,7 +155,6 @@ public class PlayerIndicatorsOverlay extends Overlay
 				}
 			}
 		}
-
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
 	}
 }

@@ -196,4 +196,26 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			position = 15,
+			keyName = "showHittableOpponents",
+			name = "Show hittable opponents",
+			description = "Highlight hittable opponants in the wilderness"
+	)
+	default boolean showHittableOpponents()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 16,
+			keyName = "getHittablePlayerColor",
+			name = "hittable player color",
+			description = "Color of the hittable player"
+	)
+	default Color getHittablePlayerColor()
+	{
+		return Color.RED;
+	}
 }
