@@ -81,8 +81,7 @@ public class WildernessUtils {
             opponentCb >= ourMinHittableLevel && opponentCb <= ourMaxHittableLevel)
         {
             log.debug(opponent.getName() + " is returning as hittable");
-            return 1; // todo figure out what 1 means
-            // hittableDistance = Math.abs(opponent.getCombatLevel() - client.getLocalPlayer().getCombatLevel());
+            return Math.abs(ourCbLevel - opponentCb); // the level above which we can fight
         }
         log.debug(opponent.getName() + " is returning as NOT hittable");
 
@@ -105,12 +104,12 @@ public class WildernessUtils {
         // if they're lower than us
         if (client.getLocalPlayer().getLocalLocation().getSceneY() > opponent.getLocalLocation().getSceneY())
         {
-            theirNumTilesFromZero = ourNumTilesFromZero + (opponent.getLocalLocation().getSceneY() - client.getLocalPlayer().getLocalLocation().getSceneY());
-            log.debug(opponent.getName() + " is lower than us and their numtilesfromzero: " + theirNumTilesFromZero);
+            theirNumTilesFromZero = ourNumTilesFromZero - (client.getLocalPlayer().getLocalLocation().getSceneY() - opponent.getLocalLocation().getSceneY());
+            log.debug(opponent.getName() + " is lower than us and their numtilesfromzero: " + theirNumTilesFromZero + " from equation " + ourNumTilesFromZero + " - (" + client.getLocalPlayer().getLocalLocation().getSceneY() + " - " + opponent.getLocalLocation().getSceneY() + ")");
         }
         else // we're lower than them
         {
-            theirNumTilesFromZero = ourNumTilesFromZero - (opponent.getLocalLocation().getSceneY() - client.getLocalPlayer().getLocalLocation().getSceneY());
+            theirNumTilesFromZero = ourNumTilesFromZero + (opponent.getLocalLocation().getSceneY() - client.getLocalPlayer().getLocalLocation().getSceneY());
             log.debug(opponent.getName() + " is higher than us and theirnumtilesfromzero: " + theirNumTilesFromZero);
         }
 
@@ -119,7 +118,6 @@ public class WildernessUtils {
             log.debug(opponent.getName() + " is less than level 1");
             return 0;
         }
-
 
         int retval = Math.floorDiv(theirNumTilesFromZero, 8) + 1;
         log.debug(opponent.getName() + "(" + theirNumTilesFromZero + ", 8) + 1");

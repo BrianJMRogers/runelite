@@ -211,11 +211,22 @@ public interface PlayerIndicatorsConfig extends Config
 	@ConfigItem(
 			position = 16,
 			keyName = "getHittablePlayerColor",
-			name = "hittable player color",
+			name = "Hittable player color",
 			description = "Color of the hittable player"
 	)
 	default Color getHittablePlayerColor()
 	{
 		return Color.RED;
+	}
+
+	@ConfigItem(
+			position = 16,
+			keyName = "showWildernessThreshold",
+			name = "Show wilderness Threshold",
+			description = "Draw the wilderness level above which both players must be in order to be hittable"
+	)
+	default boolean showWildernessThreshold()
+	{
+		return true;
 	}
 }

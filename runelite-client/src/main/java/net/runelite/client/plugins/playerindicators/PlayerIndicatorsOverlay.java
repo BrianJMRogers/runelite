@@ -100,7 +100,7 @@ public class PlayerIndicatorsOverlay extends Overlay
 				zOffset = actor.getLogicalHeight() + ACTOR_OVERHEAD_TEXT_MARGIN;
 		}
 
-		String name = Text.sanitize(actor.getName());
+		String name = Text.sanitize(actor.getName()) + " (" + actor.getCombatLevel() + ")";
 
 		Point textLocation = actor.getCanvasTextLocation(graphics, name, zOffset);
 
@@ -155,7 +155,16 @@ public class PlayerIndicatorsOverlay extends Overlay
 				}
 			}
 		}
+
 		log.debug(name + " color is " + color.toString());
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
+
+		if (config.showWildernessThreshold())
+		{
+			Color cl = Color.YELLOW;
+			String wildernessThreshold = Integer.toString(Math.abs(actor.getCombatLevel() - client.getLocalPlayer().getCombatLevel()));
+			textLocation = actor.getCanvasTextLocation(graphics, wildernessThreshold, 0);
+			OverlayUtil.renderTextLocation(graphics, textLocation, wildernessThreshold, cl);
+		}
 	}
 }
