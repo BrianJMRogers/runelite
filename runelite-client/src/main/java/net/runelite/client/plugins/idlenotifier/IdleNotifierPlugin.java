@@ -58,8 +58,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
 	name = "Idle Notifier",
-	description = "Send a notification when going idle, or when HP/Prayer or combat stats reach a threshold",
-	tags = {"health", "hitpoints", "notifications", "prayer", "combat"}
+	description = "Send a notification when going idle, or when HP/Prayer reaches a threshold",
+	tags = {"health", "hitpoints", "notifications", "prayer"}
 )
 public class IdleNotifierPlugin extends Plugin
 {
@@ -88,10 +88,6 @@ public class IdleNotifierPlugin extends Plugin
 	private Actor lastInteract;
 	private boolean notifyHitpoints = true;
 	private boolean notifyPrayer = true;
-	private boolean notifyRanged = true;
-	private boolean notifyAttack = true;
-	private boolean notifyStrength = true;
-	private boolean notifyDefence = true;
 	private boolean notifyOxygen = true;
 	private boolean notifyIdleLogout = true;
 	private boolean notify6HourLogout = true;
@@ -414,26 +410,6 @@ public class IdleNotifierPlugin extends Plugin
 		if (checkFullSpecEnergy())
 		{
 			notifier.notify("[" + local.getName() + "] has restored spec energy!");
-		}
-
-		if (checkLowRanged())
-		{
-			notifier.notify("[" + local.getName() + "] has low ranged!");
-		}
-
-		if (checkLowAttack())
-		{
-			notifier.notify("[" + local.getName() + "] has low attack!");
-		}
-
-		if (checkLowStrength())
-		{
-			notifier.notify("[" + local.getName() + "] has low strength!");
-		}
-
-		if (checkLowDefence())
-		{
-			notifier.notify("[" + local.getName() + "] has low defence!");
 		}
 	}
 
