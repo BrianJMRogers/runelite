@@ -81,11 +81,6 @@ public class PlayerIndicatorsService
 					consumer.accept(player, config.getOwnPlayerColor());
 				}
 			}
-			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != 0)
-			{
-				log.debug(player.getName() + " added to consumer");
-				consumer.accept(player, config.getHittablePlayerColor());
-			}
 			else if (config.highlightFriends() && player.isFriend())
 			{
 				consumer.accept(player, config.getFriendColor());
@@ -101,6 +96,11 @@ public class PlayerIndicatorsService
 			else if (config.highlightNonClanMembers() && !isClanMember)
 			{
 				consumer.accept(player, config.getNonClanMemberColor());
+			}
+			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != 0)
+			{
+				log.debug(player.getName() + " added to consumer");
+				consumer.accept(player, config.getHittablePlayerColor());
 			}
 			else
 			{

@@ -29,17 +29,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.Client;
-import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.game.ClanManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -159,7 +154,7 @@ public class PlayerIndicatorsOverlay extends Overlay
 		log.debug(name + " color is " + color.toString());
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
 
-		if (config.showWildernessThreshold())
+		if (config.showWildernessThreshold() && config.showHittableOpponents() && WildernessUtils.isHittable(actor, client) != 0)
 		{
 			Color cl = Color.YELLOW;
 			String wildernessThreshold = Integer.toString(Math.abs(actor.getCombatLevel() - client.getLocalPlayer().getCombatLevel()));
