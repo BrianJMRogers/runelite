@@ -196,4 +196,37 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			position = 15,
+			keyName = "showHittableOpponents",
+			name = "Show hittable opponents",
+			description = "Highlight hittable opponants in the wilderness"
+	)
+	default boolean showHittableOpponents()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 16,
+			keyName = "getHittablePlayerColor",
+			name = "Hittable player color",
+			description = "Color of the hittable player"
+	)
+	default Color getHittablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			position = 16,
+			keyName = "showWildernessThreshold",
+			name = "Show wilderness Threshold",
+			description = "Draw the wilderness level above which both players must be in order to be hittable"
+	)
+	default boolean showWildernessThreshold()
+	{
+		return true;
+	}
 }

@@ -26,12 +26,22 @@ package net.runelite.client.plugins.playerindicators;
 
 import java.awt.Color;
 import java.util.function.BiConsumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.Experience;
 import net.runelite.api.Player;
+import net.runelite.api.WorldType;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.util.WildernessUtils;
 
 @Singleton
+@Slf4j
 public class PlayerIndicatorsService
 {
 	private final Client client;
@@ -47,7 +57,8 @@ public class PlayerIndicatorsService
 	public void forEachPlayer(final BiConsumer<Player, Color> consumer)
 	{
 		if (!config.highlightOwnPlayer() && !config.drawClanMemberNames()
-			&& !config.highlightFriends() && !config.highlightNonClanMembers())
+			&& !config.highlightFriends() && !config.highlightNonClanMembers()
+			&& !config.showHittableOpponents())
 		{
 			return;
 		}
@@ -86,6 +97,17 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getNonClanMemberColor());
 			}
+			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != 0)
+			{
+				log.debug(player.getName() + " added to consumer");
+				consumer.accept(player, config.getHittablePlayerColor());
+			}
+			else
+			{
+				log.debug(player.getName() + " not hittable or aded to consumer");
+			}
 		}
 	}
+
+
 }

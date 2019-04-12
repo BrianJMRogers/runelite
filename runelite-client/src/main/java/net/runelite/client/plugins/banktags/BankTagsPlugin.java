@@ -225,7 +225,15 @@ public class BankTagsPlugin extends Plugin implements MouseWheelListener, KeyLis
 
 			if (tagCount > 0)
 			{
-				text += " (" + tagCount + ")";
+				String tagString = "";
+				for (String tag : tagManager.getTags(itemID, false)) {
+					if (tagString != "") {
+						tagString += ",";
+					}
+					tagString += tag;
+				}
+
+				text += " (" + tagString + ")";
 			}
 
 			MenuEntry editTags = new MenuEntry();

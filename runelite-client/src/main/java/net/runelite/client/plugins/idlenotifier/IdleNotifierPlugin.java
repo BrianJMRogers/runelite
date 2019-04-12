@@ -57,9 +57,9 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
-	name = "Idle Notifier",
-	description = "Send a notification when going idle, or when HP/Prayer or combat stats reach a threshold",
-	tags = {"health", "hitpoints", "notifications", "prayer", "combat"}
+		name = "Idle Notifier",
+		description = "Send a notification when going idle, or when HP/Prayer or combat stats reach a threshold",
+		tags = {"health", "hitpoints", "notifications", "prayer", "combat"}
 )
 public class IdleNotifierPlugin extends Plugin
 {
@@ -136,11 +136,11 @@ public class IdleNotifierPlugin extends Plugin
 			case WOODCUTTING_DRAGON:
 			case WOODCUTTING_INFERNAL:
 			case WOODCUTTING_3A_AXE:
-			/* Cooking(Fire, Range) */
+				/* Cooking(Fire, Range) */
 			case COOKING_FIRE:
 			case COOKING_RANGE:
 			case COOKING_WINE:
-			/* Crafting(Gem Cutting, Glassblowing, Spinning, Battlestaves) */
+				/* Crafting(Gem Cutting, Glassblowing, Spinning, Battlestaves) */
 			case GEM_CUTTING_OPAL:
 			case GEM_CUTTING_JADE:
 			case GEM_CUTTING_REDTOPAZ:
@@ -153,7 +153,7 @@ public class IdleNotifierPlugin extends Plugin
 			case CRAFTING_SPINNING:
 			case CRAFTING_BATTLESTAVES:
 			case CRAFTING_LEATHER:
-			/* Fletching(Cutting, Stringing) */
+				/* Fletching(Cutting, Stringing) */
 			case FLETCHING_BOW_CUTTING:
 			case FLETCHING_STRING_NORMAL_SHORTBOW:
 			case FLETCHING_STRING_OAK_SHORTBOW:
@@ -167,14 +167,14 @@ public class IdleNotifierPlugin extends Plugin
 			case FLETCHING_STRING_MAPLE_LONGBOW:
 			case FLETCHING_STRING_YEW_LONGBOW:
 			case FLETCHING_STRING_MAGIC_LONGBOW:
-			/* Smithing(Anvil, Furnace, Cannonballs */
+				/* Smithing(Anvil, Furnace, Cannonballs */
 			case SMITHING_ANVIL:
 			case SMITHING_SMELTING:
 			case SMITHING_CANNONBALL:
-			/* Fishing */
+				/* Fishing */
 			case FISHING_CRUSHING_INFERNAL_EELS:
 			case FISHING_CUTTING_SACRED_EELS:
-			/* Mining(Normal) */
+				/* Mining(Normal) */
 			case MINING_BRONZE_PICKAXE:
 			case MINING_IRON_PICKAXE:
 			case MINING_STEEL_PICKAXE:
@@ -188,7 +188,7 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_3A_PICKAXE:
 			case DENSE_ESSENCE_CHIPPING:
 			case DENSE_ESSENCE_CHISELING:
-			/* Mining(Motherlode) */
+				/* Mining(Motherlode) */
 			case MINING_MOTHERLODE_BRONZE:
 			case MINING_MOTHERLODE_IRON:
 			case MINING_MOTHERLODE_STEEL:
@@ -200,23 +200,24 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_MOTHERLODE_DRAGON_ORN:
 			case MINING_MOTHERLODE_INFERNAL:
 			case MINING_MOTHERLODE_3A:
-			/* Herblore */
+				/* Herblore */
 			case HERBLORE_PESTLE_AND_MORTAR:
 			case HERBLORE_POTIONMAKING:
 			case HERBLORE_MAKE_TAR:
-			/* Magic */
+				/* Magic */
 			case MAGIC_CHARGING_ORBS:
 			case MAGIC_LUNAR_STRING_JEWELRY:
 			case MAGIC_MAKE_TABLET:
 			case MAGIC_ENCHANTING_JEWELRY:
+
 			case MAGIC_ENCHANTING_AMULET_1:
 			case MAGIC_ENCHANTING_AMULET_2:
 			case MAGIC_ENCHANTING_AMULET_3:
 			/* Prayer */
 			case USING_GILDED_ALTAR:
-			/* Farming */
+				/* Farming */
 			case FARMING_MIX_ULTRACOMPOST:
-			/* Misc */
+				/* Misc */
 			case PISCARILIUS_CRANE_REPAIR:
 			case HOME_MAKE_TABLET:
 			case SAND_COLLECTION:
@@ -333,7 +334,7 @@ public class IdleNotifierPlugin extends Plugin
 		final Hitsplat hitsplat = event.getHitsplat();
 
 		if (hitsplat.getHitsplatType() == Hitsplat.HitsplatType.DAMAGE
-			|| hitsplat.getHitsplatType() == Hitsplat.HitsplatType.BLOCK)
+				|| hitsplat.getHitsplatType() == Hitsplat.HitsplatType.BLOCK)
 		{
 			lastCombatCountdown = HIGHEST_MONSTER_ATTACK_SPEED;
 		}
@@ -363,10 +364,10 @@ public class IdleNotifierPlugin extends Plugin
 		lastCombatCountdown = Math.max(lastCombatCountdown - 1, 0);
 
 		if (client.getGameState() != GameState.LOGGED_IN
-			|| local == null
-			// If user has clicked in the last second then they're not idle so don't send idle notification
-			|| System.currentTimeMillis() - client.getMouseLastPressedMillis() < 1000
-			|| client.getKeyboardIdleTicks() < 10)
+				|| local == null
+				// If user has clicked in the last second then they're not idle so don't send idle notification
+				|| System.currentTimeMillis() - client.getMouseLastPressedMillis() < 1000
+				|| client.getKeyboardIdleTicks() < 10)
 		{
 			resetTimers();
 			return;
@@ -454,7 +455,7 @@ public class IdleNotifierPlugin extends Plugin
 		// Check if we have regenerated over the threshold, and that the
 		// regen was small enough.
 		boolean notify = lastSpecEnergy < threshold && currentSpecEnergy >= threshold
-			&& currentSpecEnergy - lastSpecEnergy <= 100;
+				&& currentSpecEnergy - lastSpecEnergy <= 100;
 		lastSpecEnergy = currentSpecEnergy;
 		return notify;
 	}
@@ -638,8 +639,8 @@ public class IdleNotifierPlugin extends Plugin
 		if (interact == null)
 		{
 			if (lastInteracting != null
-				&& Instant.now().compareTo(lastInteracting.plus(waitDuration)) >= 0
-				&& lastCombatCountdown == 0)
+					&& Instant.now().compareTo(lastInteracting.plus(waitDuration)) >= 0
+					&& lastCombatCountdown == 0)
 			{
 				lastInteract = null;
 				lastInteracting = null;

@@ -32,10 +32,10 @@ import net.runelite.client.config.ConfigItem;
 public interface IdleNotifierConfig extends Config
 {
 	@ConfigItem(
-		keyName = "animationidle",
-		name = "Idle Animation Notifications",
-		description = "Configures if idle animation notifications are enabled",
-		position = 1
+			keyName = "animationidle",
+			name = "Idle Animation Notifications",
+			description = "Configures if idle animation notifications are enabled",
+			position = 1
 	)
 	default boolean animationIdle()
 	{
@@ -43,10 +43,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "interactionidle",
-		name = "Idle Interaction Notifications",
-		description = "Configures if idle interaction notifications are enabled e.g. combat, fishing",
-		position = 2
+			keyName = "interactionidle",
+			name = "Idle Interaction Notifications",
+			description = "Configures if idle interaction notifications are enabled e.g. combat, fishing",
+			position = 2
 	)
 	default boolean interactionIdle()
 	{
@@ -54,10 +54,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "logoutidle",
-		name = "Idle Logout Notifications",
-		description = "Configures if the idle logout notifications are enabled",
-		position = 3
+			keyName = "logoutidle",
+			name = "Idle Logout Notifications",
+			description = "Configures if the idle logout notifications are enabled",
+			position = 3
 	)
 	default boolean logoutIdle()
 	{
@@ -65,10 +65,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "timeout",
-		name = "Idle Notification Delay (ms)",
-		description = "The notification delay after the player is idle",
-		position = 4
+			keyName = "timeout",
+			name = "Idle Notification Delay (ms)",
+			description = "The notification delay after the player is idle",
+			position = 4
 	)
 	default int getIdleNotificationDelay()
 	{
@@ -76,10 +76,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "oxygen",
-		name = "Oxygen Notification Threshold",
-		position = 5,
-		description = "The amount of remaining oxygen to send a notification at. A value of 0 will disable notification."
+			keyName = "oxygen",
+			name = "Oxygen Notification Threshold",
+			position = 5,
+			description = "The amount of remaining oxygen to send a notification at. A value of 0 will disable notification."
 	)
 	default int getOxygenThreshold()
 	{
