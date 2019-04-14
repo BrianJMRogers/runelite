@@ -220,7 +220,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 16,
+			position = 18,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"
@@ -229,4 +229,28 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			position = 19,
+			keyName = "showPlayerClumps",
+			name = "show player clumps",
+			description = "Draw tiles around players in potential clumps. Show hittable players must be enabled"
+	)
+	default boolean showPlayerClumps()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 20,
+			keyName = "clumpablePlayerColors",
+			name = "clumpable players color",
+			description = "Color of the clumpable players"
+	)
+	default Color getClumpablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+
 }

@@ -39,17 +39,28 @@ public class WildernessUtils {
 
         return Integer.parseInt(m.group(1));
     }
+    public static int isInClump(Player opponent, Client client)
+    {
+        int playersInClump = 0;
+        for (Player player : client.getPlayers())
+        {
+            if (!player.isClanMember() &&
+                player != opponent &&
+                isWithinClumpableDistance(opponent, player) &&
+                isHittable(player, client) != 0)
+            {
+                playersInClump++;
+            }
+        }
+        return playersInClump;
+    }
 
     public static int isHittable(Player opponent, Client client)
     {
-        log.debug("determining if " + opponent.getName() + " is hittable");
-
-
         // if we aren't in the wild, we can't hit them
         int ourWildernessLevel = getWildernessLevel(client);
         if (ourWildernessLevel == 0)
         {
-            log.debug("YAOYAO our wilderness level is zero");
             return 0;
         }
         // we are in the wild. We need to use our wilderness level and our
@@ -57,8 +68,6 @@ public class WildernessUtils {
         // if they aren't in the wild, we can't hit them
         if (opponent.getLocalLocation().getSceneY() < LEVEL_ONE_WILDERNESS_Y)
         {
-            log.debug("YAOYAO: myY" + client.getLocalPlayer().getLocalLocation().getSceneY());
-            log.debug("YAOYAO oppoenent y: " + opponent.getLocalLocation().getSceneY() );
             return 0;
         }
         int hittableDistance = 0;
@@ -84,8 +93,19 @@ public class WildernessUtils {
             return Math.abs(ourCbLevel - opponentCb); // the level above which we can fight
         }
         log.debug(opponent.getName() + " is returning as NOT hittable");
-
+        if (opponentCb == ourCbLevel) log.debug("*** EQUAL COMBAT LEVELS ***");
         return hittableDistance;
+    }
+
+    private static boolean isWithinClumpableDistance(Player p1, Player p2)
+    {
+        if (Math.abs(p1.getLocalLocation().getSceneY() - p2.getLocalLocation().getSceneY()) <= 1 &&
+            Math.abs(p1.getLocalLocation().getSceneX() - p2.getLocalLocation().getSceneX()) <= 1)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static int getWildernessLevelOfPlayer(Player opponent, Client client)

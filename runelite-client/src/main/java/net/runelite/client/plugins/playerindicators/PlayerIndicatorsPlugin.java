@@ -32,10 +32,7 @@ import net.runelite.api.*;
 
 import static net.runelite.api.ClanMemberRank.UNRANKED;
 import static net.runelite.api.MenuAction.*;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ClanManager;
@@ -50,7 +47,6 @@ import net.runelite.client.util.WildernessUtils;
 	description = "Highlight players on-screen and/or on the minimap",
 	tags = {"highlight", "minimap", "overlay", "players"}
 )
-@Slf4j
 public class PlayerIndicatorsPlugin extends Plugin
 {
 	@Inject
@@ -161,20 +157,22 @@ public class PlayerIndicatorsPlugin extends Plugin
 			}
 			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != -1)
 			{
-
-				color = config.getHittablePlayerColor();
-				log.debug(player.getName() + " is getting colored to " + color.toString());
+				// determine if in a clump
+				if (config.showPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)
+				{
+					color = config.getClumpablePlayerColor();
+				} else {
+					color = config.getHittablePlayerColor();
+				}
 			}
 
 			if (image != -1 || color != null)
 			{
-				log.debug("image != -1, color != null");
 				MenuEntry[] menuEntries = client.getMenuEntries();
 				MenuEntry lastEntry = menuEntries[menuEntries.length - 1];
 
 				if (color != null && config.colorPlayerMenu())
 				{
-					log.debug("config.colorPlayerMenu()");
 					// strip out existing <col...
 					String target = lastEntry.getTarget();
 					int idx = target.indexOf('>');
@@ -184,9 +182,6 @@ public class PlayerIndicatorsPlugin extends Plugin
 					}
 
 					lastEntry.setTarget(ColorUtil.prependColorTag(target, color));
-				}
-				else {
-					log.debug("!");
 				}
 
 				if (image != -1 && config.showClanRanks())
