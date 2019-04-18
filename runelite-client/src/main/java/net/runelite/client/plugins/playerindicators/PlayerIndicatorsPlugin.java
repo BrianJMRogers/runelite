@@ -47,6 +47,7 @@ import net.runelite.client.util.WildernessUtils;
 	description = "Highlight players on-screen and/or on the minimap",
 	tags = {"highlight", "minimap", "overlay", "players"}
 )
+
 public class PlayerIndicatorsPlugin extends Plugin
 {
 	@Inject

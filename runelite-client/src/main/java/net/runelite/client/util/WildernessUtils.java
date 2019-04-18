@@ -1,5 +1,4 @@
 package net.runelite.client.util;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Experience;
 import net.runelite.api.Player;
@@ -7,14 +6,11 @@ import net.runelite.api.WorldType;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 
-import javax.inject.Inject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 public class WildernessUtils {
     public static final int LEVEL_ONE_WILDERNESS_Y = 5;
-    public static final int LEVEL_TWO_WILDERNESS_Y = 8;
     public static final int MIN_COMBAT_LEVEL = 3;
     public static final int NUM_TILES_PER_WILDY_LEVEL = 8;
     public static final int WILDY_GRID_SIZE = 64;
@@ -81,19 +77,13 @@ public class WildernessUtils {
         int ourCbLevel = client.getLocalPlayer().getCombatLevel();
         int ourMinHittableLevel = Math.max(MIN_COMBAT_LEVEL, ourCbLevel - ourWildernessLevel);
         int ourMaxHittableLevel = Math.min(Experience.MAX_COMBAT_LEVEL, ourCbLevel + ourWildernessLevel);
-        log.debug(opponent.getName() + "opponentCb: " + opponentCb + ", opponentWildernessLevel: " + opponentWildernessLevel);
-        log.debug(opponent.getName() + "opponentMinHittableLevel: " + opponentMinHittableLevel + ", oppnentMaxHittableLevel: " + opponentMaxHittableLevel);
-        log.debug(opponent.getName() + ": " + ourCbLevel + " >= " + opponentMinHittableLevel + " && " + ourCbLevel + " <= " + opponentMaxHittableLevel);
-        log.debug(opponent.getName() + ": " + opponentCb + " >= " + ourMinHittableLevel + " && " + opponentCb + " <= " + ourMaxHittableLevel);
         // determine if we are within their cb bracket and vice versa
         if (ourCbLevel >= opponentMinHittableLevel && ourCbLevel <= opponentMaxHittableLevel &&
             opponentCb >= ourMinHittableLevel && opponentCb <= ourMaxHittableLevel)
         {
-            log.debug(opponent.getName() + " is returning as hittable");
+            if (ourCbLevel == opponentCb) return 1;
             return Math.abs(ourCbLevel - opponentCb); // the level above which we can fight
         }
-        log.debug(opponent.getName() + " is returning as NOT hittable");
-        if (opponentCb == ourCbLevel) log.debug("*** EQUAL COMBAT LEVELS ***");
         return hittableDistance;
     }
 
@@ -115,32 +105,23 @@ public class WildernessUtils {
         int wildyGridNumber = Math.floorDiv(ourWildernessLevel, NUM_TILES_PER_WILDY_LEVEL);
         int ourNumTilesFromZero = wildyGridNumber * WILDY_GRID_SIZE + ourYValue;
 
-        log.debug(opponent.getName() + " ourwildernesslevel: " + ourWildernessLevel);
-        log.debug(opponent.getName() + "ourYvalue: " + ourYValue);
-        log.debug(opponent.getName() + "wildygridNumber: " + wildyGridNumber);
-        log.debug(opponent.getName() + "ourNumTilesFromZero: " + ourNumTilesFromZero);
         int theirNumTilesFromZero;
 
         // if they're lower than us
         if (client.getLocalPlayer().getLocalLocation().getSceneY() > opponent.getLocalLocation().getSceneY())
         {
             theirNumTilesFromZero = ourNumTilesFromZero - (client.getLocalPlayer().getLocalLocation().getSceneY() - opponent.getLocalLocation().getSceneY());
-            log.debug(opponent.getName() + " is lower than us and their numtilesfromzero: " + theirNumTilesFromZero + " from equation " + ourNumTilesFromZero + " - (" + client.getLocalPlayer().getLocalLocation().getSceneY() + " - " + opponent.getLocalLocation().getSceneY() + ")");
         }
         else // we're lower than them
         {
             theirNumTilesFromZero = ourNumTilesFromZero + (opponent.getLocalLocation().getSceneY() - client.getLocalPlayer().getLocalLocation().getSceneY());
-            log.debug(opponent.getName() + " is higher than us and theirnumtilesfromzero: " + theirNumTilesFromZero);
         }
 
         if (theirNumTilesFromZero < LEVEL_ONE_WILDERNESS_Y)
         {
-            log.debug(opponent.getName() + " is less than level 1");
             return 0;
         }
 
-        int retval = Math.floorDiv(theirNumTilesFromZero, 8) + 1;
-        log.debug(opponent.getName() + "(" + theirNumTilesFromZero + ", 8) + 1");
-        return retval;
+        return Math.floorDiv(theirNumTilesFromZero, 8) + 1;
     }
 }
