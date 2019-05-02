@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 kulers
+ * Copyright (c) 2019, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,44 +22,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.inventorytags;
+package net.runelite.api;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import javax.inject.Inject;
-import net.runelite.api.widgets.WidgetItem;
-import net.runelite.client.game.ItemManager;
-import net.runelite.client.ui.overlay.WidgetItemOverlay;
-
-public class InventoryTagsOverlay extends WidgetItemOverlay
+public interface HealthBar
 {
-	private final ItemManager itemManager;
-	private final InventoryTagsPlugin plugin;
+	SpritePixels getHealthBarFrontSprite();
 
-	@Inject
-	private InventoryTagsOverlay(ItemManager itemManager, InventoryTagsPlugin plugin)
-	{
-		this.itemManager = itemManager;
-		this.plugin = plugin;
-		showOnEquipment();
-		showOnInventory();
-	}
+	SpritePixels getHealthBarBackSprite();
 
-	@Override
-	public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem itemWidget)
-	{
-		final String group = plugin.getTag(itemId);
-		if (group != null)
-		{
-			final Color color = plugin.getGroupNameColor(group);
-			if (color != null)
-			{
-				Rectangle bounds = itemWidget.getCanvasBounds();
-				final BufferedImage outline = itemManager.getItemOutline(itemId, itemWidget.getQuantity(), color);
-				graphics.drawImage(outline, (int) bounds.getX() + 1, (int) bounds.getY() + 1, null);
-			}
-		}
-	}
+	void setPadding(int padding);
 }
