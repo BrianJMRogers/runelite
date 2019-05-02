@@ -220,6 +220,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
+<<<<<<< HEAD
 			position = 17,
 			keyName = "showCallers",
 			name = "Show callers",
@@ -270,4 +271,28 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			position = 22,
+			keyName = "showPlayerClumps",
+			name = "show player clumps",
+			description = "Draw tiles around players in potential clumps. Show hittable players must be enabled"
+	)
+	default boolean showPlayerClumps()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 23,
+			keyName = "clumpablePlayerColors",
+			name = "clumpable players color",
+			description = "Color of the clumpable players"
+	)
+	default Color getClumpablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+
 }

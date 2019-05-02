@@ -32,7 +32,6 @@ import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.Client;
 import net.runelite.client.game.ClanManager;
@@ -44,7 +43,6 @@ import net.runelite.client.util.Text;
 import net.runelite.client.util.WildernessUtils;
 
 @Singleton
-@Slf4j
 public class PlayerIndicatorsOverlay extends Overlay
 {
 	private static final int ACTOR_OVERHEAD_TEXT_MARGIN = 40;
