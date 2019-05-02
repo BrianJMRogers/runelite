@@ -220,7 +220,6 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-<<<<<<< HEAD
 			position = 17,
 			keyName = "showCallers",
 			name = "Show callers",

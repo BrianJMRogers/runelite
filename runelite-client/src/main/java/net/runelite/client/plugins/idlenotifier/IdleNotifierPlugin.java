@@ -140,7 +140,7 @@ public class IdleNotifierPlugin extends Plugin
 			case COOKING_FIRE:
 			case COOKING_RANGE:
 			case COOKING_WINE:
-				/* Crafting(Gem Cutting, Glassblowing, Spinning, Battlestaves) */
+			/* Crafting(Gem Cutting, Glassblowing, Spinning, Battlestaves, Pottery) */
 			case GEM_CUTTING_OPAL:
 			case GEM_CUTTING_JADE:
 			case GEM_CUTTING_REDTOPAZ:
@@ -153,7 +153,9 @@ public class IdleNotifierPlugin extends Plugin
 			case CRAFTING_SPINNING:
 			case CRAFTING_BATTLESTAVES:
 			case CRAFTING_LEATHER:
-				/* Fletching(Cutting, Stringing) */
+			case CRAFTING_POTTERS_WHEEL:
+			case CRAFTING_POTTERY_OVEN:
+			/* Fletching(Cutting, Stringing) */
 			case FLETCHING_BOW_CUTTING:
 			case FLETCHING_STRING_NORMAL_SHORTBOW:
 			case FLETCHING_STRING_OAK_SHORTBOW:
