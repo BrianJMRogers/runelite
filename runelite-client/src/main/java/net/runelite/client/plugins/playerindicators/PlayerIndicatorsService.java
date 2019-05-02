@@ -85,6 +85,10 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getFriendColor());
 			}
+			else if (config.showCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
+			{
+				consumer.accept(player, config.getCallerColor());
+			}
 			else if (config.drawClanMemberNames() && isClanMember)
 			{
 				consumer.accept(player, config.getClanMemberColor());
@@ -99,12 +103,7 @@ public class PlayerIndicatorsService
 			}
 			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != 0)
 			{
-				log.debug(player.getName() + " added to consumer");
 				consumer.accept(player, config.getHittablePlayerColor());
-			}
-			else
-			{
-				log.debug(player.getName() + " not hittable or aded to consumer");
 			}
 		}
 	}

@@ -220,7 +220,48 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 16,
+			position = 17,
+			keyName = "showCallers",
+			name = "Show callers",
+			description = "Highlight callers"
+	)
+	default boolean showCallers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 18,
+			keyName = "getCallerColor",
+			name = "Caller player color",
+			description = "Color of the callers"
+	)
+	default Color getCallerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			keyName = "callerNames",
+			name = "caller names",
+			description = "Configures specifically highlighted ground items. Format: (item), (item)",
+			position = 19
+	)
+	default String getCallerNames()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+			keyName = "callerNames",
+			name = "",
+			description = "",
+			position = 20
+	)
+	void setCallerNames(String key);
+
+	@ConfigItem(
+			position = 21,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"

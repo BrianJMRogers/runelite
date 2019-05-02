@@ -77,7 +77,6 @@ public class PlayerIndicatorsOverlay extends Overlay
 
 	private void renderPlayerOverlay(Graphics2D graphics, Player actor, Color color)
 	{
-		log.debug(actor.getName() + " rendering player overlay with color " + color.toString());
 		final PlayerNameLocation drawPlayerNamesConfig = config.playerNamePosition();
 		if (drawPlayerNamesConfig == PlayerNameLocation.DISABLED)
 		{
@@ -151,7 +150,6 @@ public class PlayerIndicatorsOverlay extends Overlay
 			}
 		}
 
-		log.debug(name + " color is " + color.toString());
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
 
 		if (config.showWildernessThreshold() && config.showHittableOpponents() && WildernessUtils.isHittable(actor, client) != 0)

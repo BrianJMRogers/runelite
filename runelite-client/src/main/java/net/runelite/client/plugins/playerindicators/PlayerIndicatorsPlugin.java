@@ -34,8 +34,6 @@ import static net.runelite.api.ClanMemberRank.UNRANKED;
 import static net.runelite.api.MenuAction.*;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ClanManager;
@@ -140,6 +138,10 @@ public class PlayerIndicatorsPlugin extends Plugin
 			if (config.highlightFriends() && player.isFriend())
 			{
 				color = config.getFriendColor();
+			}
+			else if (config.showCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
+			{
+				color = config.getCallerColor();
 			}
 			else if (config.drawClanMemberNames() && player.isClanMember())
 			{

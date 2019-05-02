@@ -63,7 +63,6 @@ public class PlayerIndicatorsTileOverlay extends Overlay
 
 		playerIndicatorsService.forEachPlayer((player, color) ->
 		{
-			log.debug(player.getName() + " rendering tile of color: " + color.toString());
 			final Polygon poly = player.getCanvasTilePoly();
 
 			if (poly != null)
