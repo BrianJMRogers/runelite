@@ -196,4 +196,102 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			position = 15,
+			keyName = "showHittableOpponents",
+			name = "Show hittable opponents",
+			description = "Highlight hittable opponants in the wilderness"
+	)
+	default boolean showHittableOpponents()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 16,
+			keyName = "getHittablePlayerColor",
+			name = "Hittable player color",
+			description = "Color of the hittable player"
+	)
+	default Color getHittablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			position = 17,
+			keyName = "showCallers",
+			name = "Show callers",
+			description = "Highlight callers"
+	)
+	default boolean showCallers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 18,
+			keyName = "getCallerColor",
+			name = "Caller player color",
+			description = "Color of the callers"
+	)
+	default Color getCallerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			keyName = "callerNames",
+			name = "caller names",
+			description = "Configures specifically highlighted ground items. Format: (item), (item)",
+			position = 19
+	)
+	default String getCallerNames()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+			keyName = "callerNames",
+			name = "",
+			description = "",
+			position = 20
+	)
+	void setCallerNames(String key);
+
+	@ConfigItem(
+			position = 21,
+			keyName = "showWildernessThreshold",
+			name = "Show wilderness Threshold",
+			description = "Draw the wilderness level above which both players must be in order to be hittable"
+	)
+	default boolean showWildernessThreshold()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 22,
+			keyName = "showPlayerClumps",
+			name = "show player clumps",
+			description = "Draw tiles around players in potential clumps. Show hittable players must be enabled"
+	)
+	default boolean showPlayerClumps()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 23,
+			keyName = "clumpablePlayerColors",
+			name = "clumpable players color",
+			description = "Color of the clumpable players"
+	)
+	default Color getClumpablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+
 }

@@ -31,15 +31,16 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.runelite.api.ClanMemberRank;
-import net.runelite.api.Player;
-import net.runelite.api.Point;
+
+import net.runelite.api.*;
+import net.runelite.api.Client;
 import net.runelite.client.game.ClanManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.util.Text;
+import net.runelite.client.util.WildernessUtils;
 
 @Singleton
 public class PlayerIndicatorsOverlay extends Overlay
@@ -50,6 +51,9 @@ public class PlayerIndicatorsOverlay extends Overlay
 	private final PlayerIndicatorsService playerIndicatorsService;
 	private final PlayerIndicatorsConfig config;
 	private final ClanManager clanManager;
+
+	@Inject
+	private Client client;
 
 	@Inject
 	private PlayerIndicatorsOverlay(PlayerIndicatorsConfig config, PlayerIndicatorsService playerIndicatorsService,
@@ -88,7 +92,8 @@ public class PlayerIndicatorsOverlay extends Overlay
 				zOffset = actor.getLogicalHeight() + ACTOR_OVERHEAD_TEXT_MARGIN;
 		}
 
-		final String name = Text.sanitize(actor.getName());
+		String name = Text.sanitize(actor.getName()) + " (" + actor.getCombatLevel() + ")";
+
 		Point textLocation = actor.getCanvasTextLocation(graphics, name, zOffset);
 
 		if (drawPlayerNamesConfig == PlayerNameLocation.MODEL_RIGHT)
@@ -144,5 +149,13 @@ public class PlayerIndicatorsOverlay extends Overlay
 		}
 
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
+
+		if (config.showWildernessThreshold() && config.showHittableOpponents() && WildernessUtils.isHittable(actor, client) != 0)
+		{
+			Color cl = Color.YELLOW;
+			String wildernessThreshold = Integer.toString(Math.abs(actor.getCombatLevel() - client.getLocalPlayer().getCombatLevel()));
+			textLocation = actor.getCanvasTextLocation(graphics, wildernessThreshold, 0);
+			OverlayUtil.renderTextLocation(graphics, textLocation, wildernessThreshold, cl);
+		}
 	}
 }

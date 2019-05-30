@@ -58,9 +58,9 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
-	name = "Idle Notifier",
-	description = "Send a notification when going idle, or when HP/Prayer reaches a threshold",
-	tags = {"health", "hitpoints", "notifications", "prayer"}
+		name = "Idle Notifier",
+		description = "Send a notification when going idle, or when HP/Prayer or combat stats reach a threshold",
+		tags = {"health", "hitpoints", "notifications", "prayer", "combat"}
 )
 public class IdleNotifierPlugin extends Plugin
 {
@@ -90,6 +90,10 @@ public class IdleNotifierPlugin extends Plugin
 	private Actor lastInteract;
 	private boolean notifyHitpoints = true;
 	private boolean notifyPrayer = true;
+	private boolean notifyRanged = true;
+	private boolean notifyAttack = true;
+	private boolean notifyStrength = true;
+	private boolean notifyDefence = true;
 	private boolean notifyOxygen = true;
 	private boolean notifyIdleLogout = true;
 	private boolean notify6HourLogout = true;
@@ -134,7 +138,7 @@ public class IdleNotifierPlugin extends Plugin
 			case WOODCUTTING_DRAGON:
 			case WOODCUTTING_INFERNAL:
 			case WOODCUTTING_3A_AXE:
-			/* Cooking(Fire, Range) */
+				/* Cooking(Fire, Range) */
 			case COOKING_FIRE:
 			case COOKING_RANGE:
 			case COOKING_WINE:
@@ -167,14 +171,14 @@ public class IdleNotifierPlugin extends Plugin
 			case FLETCHING_STRING_MAPLE_LONGBOW:
 			case FLETCHING_STRING_YEW_LONGBOW:
 			case FLETCHING_STRING_MAGIC_LONGBOW:
-			/* Smithing(Anvil, Furnace, Cannonballs */
+				/* Smithing(Anvil, Furnace, Cannonballs */
 			case SMITHING_ANVIL:
 			case SMITHING_SMELTING:
 			case SMITHING_CANNONBALL:
-			/* Fishing */
+				/* Fishing */
 			case FISHING_CRUSHING_INFERNAL_EELS:
 			case FISHING_CUTTING_SACRED_EELS:
-			/* Mining(Normal) */
+				/* Mining(Normal) */
 			case MINING_BRONZE_PICKAXE:
 			case MINING_IRON_PICKAXE:
 			case MINING_STEEL_PICKAXE:
@@ -188,7 +192,7 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_3A_PICKAXE:
 			case DENSE_ESSENCE_CHIPPING:
 			case DENSE_ESSENCE_CHISELING:
-			/* Mining(Motherlode) */
+				/* Mining(Motherlode) */
 			case MINING_MOTHERLODE_BRONZE:
 			case MINING_MOTHERLODE_IRON:
 			case MINING_MOTHERLODE_STEEL:
@@ -200,24 +204,25 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_MOTHERLODE_DRAGON_ORN:
 			case MINING_MOTHERLODE_INFERNAL:
 			case MINING_MOTHERLODE_3A:
-			/* Herblore */
+				/* Herblore */
 			case HERBLORE_PESTLE_AND_MORTAR:
 			case HERBLORE_POTIONMAKING:
 			case HERBLORE_MAKE_TAR:
-			/* Magic */
+				/* Magic */
 			case MAGIC_CHARGING_ORBS:
 			case MAGIC_LUNAR_PLANK_MAKE:
 			case MAGIC_LUNAR_STRING_JEWELRY:
 			case MAGIC_MAKE_TABLET:
 			case MAGIC_ENCHANTING_JEWELRY:
+
 			case MAGIC_ENCHANTING_AMULET_1:
 			case MAGIC_ENCHANTING_AMULET_2:
 			case MAGIC_ENCHANTING_AMULET_3:
 			/* Prayer */
 			case USING_GILDED_ALTAR:
-			/* Farming */
+				/* Farming */
 			case FARMING_MIX_ULTRACOMPOST:
-			/* Misc */
+				/* Misc */
 			case PISCARILIUS_CRANE_REPAIR:
 			case HOME_MAKE_TABLET:
 			case SAND_COLLECTION:
@@ -334,7 +339,7 @@ public class IdleNotifierPlugin extends Plugin
 		final Hitsplat hitsplat = event.getHitsplat();
 
 		if (hitsplat.getHitsplatType() == Hitsplat.HitsplatType.DAMAGE
-			|| hitsplat.getHitsplatType() == Hitsplat.HitsplatType.BLOCK)
+				|| hitsplat.getHitsplatType() == Hitsplat.HitsplatType.BLOCK)
 		{
 			lastCombatCountdown = HIGHEST_MONSTER_ATTACK_SPEED;
 		}
@@ -364,10 +369,10 @@ public class IdleNotifierPlugin extends Plugin
 		lastCombatCountdown = Math.max(lastCombatCountdown - 1, 0);
 
 		if (client.getGameState() != GameState.LOGGED_IN
-			|| local == null
-			// If user has clicked in the last second then they're not idle so don't send idle notification
-			|| System.currentTimeMillis() - client.getMouseLastPressedMillis() < 1000
-			|| client.getKeyboardIdleTicks() < 10)
+				|| local == null
+				// If user has clicked in the last second then they're not idle so don't send idle notification
+				|| System.currentTimeMillis() - client.getMouseLastPressedMillis() < 1000
+				|| client.getKeyboardIdleTicks() < 10)
 		{
 			resetTimers();
 			return;
@@ -419,6 +424,26 @@ public class IdleNotifierPlugin extends Plugin
 		{
 			notifier.notify("[" + local.getName() + "] has restored spec energy!");
 		}
+
+		if (checkLowRanged())
+		{
+			notifier.notify("[" + local.getName() + "] has low ranged!");
+		}
+
+		if (checkLowAttack())
+		{
+			notifier.notify("[" + local.getName() + "] has low attack!");
+		}
+
+		if (checkLowStrength())
+		{
+			notifier.notify("[" + local.getName() + "] has low strength!");
+		}
+
+		if (checkLowDefence())
+		{
+			notifier.notify("[" + local.getName() + "] has low defence!");
+		}
 	}
 
 	private boolean checkFullSpecEnergy()
@@ -435,7 +460,7 @@ public class IdleNotifierPlugin extends Plugin
 		// Check if we have regenerated over the threshold, and that the
 		// regen was small enough.
 		boolean notify = lastSpecEnergy < threshold && currentSpecEnergy >= threshold
-			&& currentSpecEnergy - lastSpecEnergy <= 100;
+				&& currentSpecEnergy - lastSpecEnergy <= 100;
 		lastSpecEnergy = currentSpecEnergy;
 		return notify;
 	}
@@ -511,6 +536,102 @@ public class IdleNotifierPlugin extends Plugin
 		return false;
 	}
 
+	private boolean checkLowRanged()
+	{
+		if (config.getRangedThreshold() == 0)
+		{
+			return false;
+		}
+
+		// ranged is boostable so we wont check that RealSkillLevel > RangedThreshold
+		if (client.getBoostedSkillLevel(Skill.RANGED) <= config.getRangedThreshold())
+		{
+			if (!notifyRanged)
+			{
+				notifyRanged = true;
+				return true;
+			}
+		}
+		else
+		{
+			notifyRanged = false;
+		}
+
+		return false;
+	}
+
+	private boolean checkLowStrength()
+	{
+		if (config.getStrengthThreshold() == 0)
+		{
+			return false;
+		}
+
+		// strength is boostable so we wont check that RealSkillLevel > StrengthThreshold
+		if (client.getBoostedSkillLevel(Skill.STRENGTH) <= config.getStrengthThreshold())
+		{
+			if (!notifyStrength)
+			{
+				notifyStrength = true;
+				return true;
+			}
+		}
+		else
+		{
+			notifyStrength = false;
+		}
+
+		return false;
+	}
+
+	private boolean checkLowAttack()
+	{
+		if (config.getAttackThreshold() == 0)
+		{
+			return false;
+		}
+
+		// attack is boostable so we wont check that RealSkillLevel > AttackThreshold
+		if (client.getBoostedSkillLevel(Skill.ATTACK) <= config.getAttackThreshold())
+		{
+			if (!notifyAttack)
+			{
+				notifyAttack = true;
+				return true;
+			}
+		}
+		else
+		{
+			notifyAttack = false;
+		}
+
+		return false;
+	}
+
+	private boolean checkLowDefence()
+	{
+		if (config.getDefenceThreshold() == 0)
+		{
+			return false;
+		}
+
+		// attack is boostable so we wont check that RealSkillLevel > DefenceThreshold
+		if (client.getBoostedSkillLevel(Skill.DEFENCE) <= config.getDefenceThreshold())
+		{
+			if (!notifyDefence)
+			{
+				notifyDefence = true;
+				return true;
+			}
+		}
+		else
+		{
+			notifyDefence = false;
+		}
+
+		return false;
+	}
+
 	private boolean checkInteractionIdle(Duration waitDuration, Player local)
 	{
 		if (lastInteract == null)
@@ -523,8 +644,8 @@ public class IdleNotifierPlugin extends Plugin
 		if (interact == null)
 		{
 			if (lastInteracting != null
-				&& Instant.now().compareTo(lastInteracting.plus(waitDuration)) >= 0
-				&& lastCombatCountdown == 0)
+					&& Instant.now().compareTo(lastInteracting.plus(waitDuration)) >= 0
+					&& lastCombatCountdown == 0)
 			{
 				lastInteract = null;
 				lastInteracting = null;
