@@ -150,7 +150,7 @@ public class PlayerIndicatorsOverlay extends Overlay
 
 		OverlayUtil.renderTextLocation(graphics, textLocation, name, color);
 
-		if (config.showWildernessThreshold() && config.highlightHittablePlayers() && WildernessUtils.isHittable(actor, client) != 0)
+		if (config.showWildernessThreshold())
 		{
 			Color cl = Color.YELLOW;
 			String wildernessThreshold = Integer.toString(Math.abs(actor.getCombatLevel() - client.getLocalPlayer().getCombatLevel()));
