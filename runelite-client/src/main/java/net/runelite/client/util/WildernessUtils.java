@@ -41,6 +41,7 @@ public class WildernessUtils {
         for (Player player : client.getPlayers())
         {
             if (!player.isClanMember() &&
+                !isTeammate(player, client) &&
                 player != opponent &&
                 isWithinClumpableDistance(opponent, player) &&
                 isHittable(player, client) != 0)
@@ -49,6 +50,15 @@ public class WildernessUtils {
             }
         }
         return playersInClump;
+    }
+
+    private static boolean isTeammate(Player player, Client client)
+    {
+      if (player.getTeam() > 0 && client.getLocalPlayer().getTeam() == player.getTeam())
+      {
+        return true;
+      }
+      return false;
     }
 
     public static int isHittable(Player opponent, Client client)
