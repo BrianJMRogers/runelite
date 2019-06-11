@@ -50,7 +50,7 @@ public class PlayerIndicatorsService
 	{
 		if (!config.highlightOwnPlayer() && !config.drawClanMemberNames()
 			&& !config.highlightFriends() && !config.highlightNonClanMembers()
-			&& !config.showHittableOpponents())
+			&& !config.highlightHittablePlayers())
 		{
 			return;
 		}
@@ -77,7 +77,7 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getFriendColor());
 			}
-			else if (config.showCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
+			else if (config.highlightCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
 			{
 				consumer.accept(player, config.getCallerColor());
 			}
@@ -93,10 +93,10 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getNonClanMemberColor());
 			}
-			else if (config.showHittableOpponents() && WildernessUtils.isHittable(player, client) != 0)
+			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != 0)
 			{
 				// determine if in a clump
-				if (config.showPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)
+				if (config.highlightPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)
 				{
 					consumer.accept(player, config.getClumpablePlayerColor());
 				} else {

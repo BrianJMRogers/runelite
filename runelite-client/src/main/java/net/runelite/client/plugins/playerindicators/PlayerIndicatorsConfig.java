@@ -143,73 +143,18 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 10,
-		keyName = "drawPlayerTiles",
-		name = "Draw tiles under players",
-		description = "Configures whether or not tiles under highlighted players should be drawn"
+			position = 10,
+			keyName = "highlightHittablePlayers",
+			name = "Highlight hittable players",
+			description = "Highlight hittable players in the wilderness"
 	)
-	default boolean drawTiles()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 11,
-		keyName = "playerNamePosition",
-		name = "Name position",
-		description = "Configures the position of drawn player names, or if they should be disabled"
-	)
-	default PlayerNameLocation playerNamePosition()
-	{
-		return PlayerNameLocation.ABOVE_HEAD;
-	}
-
-	@ConfigItem(
-		position = 12,
-		keyName = "drawMinimapNames",
-		name = "Draw names on minimap",
-		description = "Configures whether or not minimap names for players with rendered names should be drawn"
-	)
-	default boolean drawMinimapNames()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		position = 13,
-		keyName = "colorPlayerMenu",
-		name = "Colorize player menu",
-		description = "Color right click menu for players"
-	)
-	default boolean colorPlayerMenu()
+	default boolean highlightHittablePlayers()
 	{
 		return true;
 	}
 
 	@ConfigItem(
-		position = 14,
-		keyName = "clanMenuIcons",
-		name = "Show clan ranks",
-		description = "Add clan rank to right click menu and next to player names"
-	)
-	default boolean showClanRanks()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-			position = 15,
-			keyName = "showHittableOpponents",
-			name = "Show hittable opponents",
-			description = "Highlight hittable opponants in the wilderness"
-	)
-	default boolean showHittableOpponents()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-			position = 16,
+			position = 11,
 			keyName = "getHittablePlayerColor",
 			name = "Hittable player color",
 			description = "Color of the hittable player"
@@ -220,18 +165,40 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 17,
-			keyName = "showCallers",
-			name = "Show callers",
-			description = "Highlight callers"
+			position = 12,
+			keyName = "highlightPlayerClumps",
+			name = "Highlight player clumps",
+			description = "Draw tiles around players in potential clumps. Highlight hittable players must be enabled"
 	)
-	default boolean showCallers()
+	default boolean highlightPlayerClumps()
 	{
 		return true;
 	}
 
 	@ConfigItem(
-			position = 18,
+			position = 13,
+			keyName = "clumpablePlayerColors",
+			name = "clumpable players color",
+			description = "Color of the clumpable players"
+	)
+	default Color getClumpablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+			position = 14,
+			keyName = "highlightCallers",
+			name = "Highlight callers",
+			description = "Highlight callers"
+	)
+	default boolean highlightCallers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 15,
 			keyName = "getCallerColor",
 			name = "Caller player color",
 			description = "Color of the callers"
@@ -245,7 +212,7 @@ public interface PlayerIndicatorsConfig extends Config
 			keyName = "callerNames",
 			name = "caller names",
 			description = "Configures specifically highlighted ground items. Format: (item), (item)",
-			position = 19
+			position = 16
 	)
 	default String getCallerNames()
 	{
@@ -261,7 +228,62 @@ public interface PlayerIndicatorsConfig extends Config
 	void setCallerNames(String key);
 
 	@ConfigItem(
-			position = 21,
+		position = 17,
+		keyName = "drawPlayerTiles",
+		name = "Draw tiles under players",
+		description = "Configures whether or not tiles under highlighted players should be drawn"
+	)
+	default boolean drawTiles()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 18,
+		keyName = "playerNamePosition",
+		name = "Name position",
+		description = "Configures the position of drawn player names, or if they should be disabled"
+	)
+	default PlayerNameLocation playerNamePosition()
+	{
+		return PlayerNameLocation.ABOVE_HEAD;
+	}
+
+	@ConfigItem(
+		position = 19,
+		keyName = "drawMinimapNames",
+		name = "Draw names on minimap",
+		description = "Configures whether or not minimap names for players with rendered names should be drawn"
+	)
+	default boolean drawMinimapNames()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 20,
+		keyName = "colorPlayerMenu",
+		name = "Colorize player menu",
+		description = "Color right click menu for players"
+	)
+	default boolean colorPlayerMenu()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		position = 21,
+		keyName = "clanMenuIcons",
+		name = "Show clan ranks",
+		description = "Add clan rank to right click menu and next to player names"
+	)
+	default boolean showClanRanks()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 22,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"
@@ -271,27 +293,7 @@ public interface PlayerIndicatorsConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(
-			position = 22,
-			keyName = "showPlayerClumps",
-			name = "show player clumps",
-			description = "Draw tiles around players in potential clumps. Show hittable players must be enabled"
-	)
-	default boolean showPlayerClumps()
-	{
-		return true;
-	}
 
-	@ConfigItem(
-			position = 23,
-			keyName = "clumpablePlayerColors",
-			name = "clumpable players color",
-			description = "Color of the clumpable players"
-	)
-	default Color getClumpablePlayerColor()
-	{
-		return Color.RED;
-	}
 
 
 }
