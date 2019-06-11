@@ -15,7 +15,7 @@ public class WildernessUtils {
     public static final int NUM_TILES_PER_WILDY_LEVEL = 8;
     public static final int WILDY_GRID_SIZE = 64;
 
-    private static int getWildernessLevel(Client client)
+    public static int getWildernessLevel(Client client)
     {
         final Pattern WILDERNESS_LEVEL_PATTERN = Pattern.compile("^Level: (\\d+).*$");
         final Widget wildernessLevelWidget = client.getWidget(WidgetInfo.PVP_WILDERNESS_LEVEL);
@@ -98,7 +98,7 @@ public class WildernessUtils {
         return false;
     }
 
-    private static int getWildernessLevelOfPlayer(Player opponent, Client client)
+    public static int getWildernessLevelOfPlayer(Player opponent, Client client)
     {
         int ourWildernessLevel = getWildernessLevel(client);
         int ourYValue = client.getLocalPlayer().getWorldLocation().getRegionY();

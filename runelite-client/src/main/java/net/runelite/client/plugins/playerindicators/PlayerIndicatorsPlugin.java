@@ -142,6 +142,10 @@ public class PlayerIndicatorsPlugin extends Plugin
 			{
 				color = config.getCallerColor();
 			}
+			else if (config.ignoreClanMembers() && player.isClanMember())
+			{
+				// do nothing (no color)
+			}
 			else if (config.drawClanMemberNames() && player.isClanMember())
 			{
 				color = config.getClanMemberColor();
@@ -151,6 +155,10 @@ public class PlayerIndicatorsPlugin extends Plugin
 				{
 					image = clanManager.getIconNumber(rank);
 				}
+			}
+			else if (config.ignoreTeamMembers() && player.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
+			{
+				// do nothing (no color)
 			}
 			else if (config.highlightTeamMembers() && player.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
 			{

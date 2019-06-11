@@ -78,6 +78,17 @@ public interface PlayerIndicatorsConfig extends Config
 
 	@ConfigItem(
 		position = 4,
+		keyName = "ignoreClanMember",
+		name = "Ignore clan members",
+		description = "Configures whether or not clan members should be ignored"
+	)
+	default boolean ignoreClanMembers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 5,
 		keyName = "drawClanMemberNames",
 		name = "Highlight clan members",
 		description = "Configures whether or clan members should be highlighted"
@@ -88,7 +99,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 5,
+		position = 6,
 		keyName = "clanMemberColor",
 		name = "Clan member color",
 		description = "Color of clan members"
@@ -98,8 +109,20 @@ public interface PlayerIndicatorsConfig extends Config
 		return new Color(170, 0, 255);
 	}
 
+
 	@ConfigItem(
-		position = 6,
+		position = 7,
+		keyName = "ignoreTeamMembers",
+		name = "Ignore team members",
+		description = "Configures whether or not team members should be ignored"
+	)
+	default boolean ignoreTeamMembers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 8,
 		keyName = "drawTeamMemberNames",
 		name = "Highlight team members",
 		description = "Configures whether or not team members should be highlighted"
@@ -110,7 +133,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 7,
+		position = 9,
 		keyName = "teamMemberColor",
 		name = "Team member color",
 		description = "Color of team members"
@@ -121,7 +144,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 8,
+		position = 10,
 		keyName = "drawNonClanMemberNames",
 		name = "Highlight non-clan members",
 		description = "Configures whether or not non-clan members should be highlighted"
@@ -132,7 +155,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 9,
+			position = 11,
 		keyName = "nonClanMemberColor",
 		name = "Non-clan member color",
 		description = "Color of non-clan member names"
@@ -143,7 +166,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 10,
+			position = 12,
 			keyName = "highlightHittablePlayers",
 			name = "Highlight hittable players",
 			description = "Highlight hittable players in the wilderness"
@@ -154,7 +177,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 11,
+			position = 13,
 			keyName = "getHittablePlayerColor",
 			name = "Hittable player color",
 			description = "Color of the hittable player"
@@ -165,7 +188,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 12,
+			position = 14,
 			keyName = "highlightPlayerClumps",
 			name = "Highlight player clumps",
 			description = "Draw tiles around players in potential clumps. Highlight hittable players must be enabled"
@@ -176,7 +199,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 13,
+			position = 15,
 			keyName = "clumpablePlayerColors",
 			name = "clumpable players color",
 			description = "Color of the clumpable players"
@@ -187,7 +210,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 14,
+			position = 16,
 			keyName = "highlightCallers",
 			name = "Highlight callers",
 			description = "Highlight callers"
@@ -198,7 +221,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 15,
+			position = 17,
 			keyName = "getCallerColor",
 			name = "Caller player color",
 			description = "Color of the callers"
@@ -212,7 +235,7 @@ public interface PlayerIndicatorsConfig extends Config
 			keyName = "callerNames",
 			name = "caller names",
 			description = "Configures specifically highlighted ground items. Format: (item), (item)",
-			position = 16
+			position = 18
 	)
 	default String getCallerNames()
 	{
@@ -223,12 +246,12 @@ public interface PlayerIndicatorsConfig extends Config
 			keyName = "callerNames",
 			name = "",
 			description = "",
-			position = 20
+			position = 19
 	)
 	void setCallerNames(String key);
 
 	@ConfigItem(
-		position = 17,
+		position = 20,
 		keyName = "drawPlayerTiles",
 		name = "Draw tiles under players",
 		description = "Configures whether or not tiles under highlighted players should be drawn"
@@ -239,7 +262,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 18,
+		position = 21,
 		keyName = "playerNamePosition",
 		name = "Name position",
 		description = "Configures the position of drawn player names, or if they should be disabled"
@@ -250,7 +273,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 19,
+		position = 22,
 		keyName = "drawMinimapNames",
 		name = "Draw names on minimap",
 		description = "Configures whether or not minimap names for players with rendered names should be drawn"
@@ -261,7 +284,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 20,
+		position = 23,
 		keyName = "colorPlayerMenu",
 		name = "Colorize player menu",
 		description = "Color right click menu for players"
@@ -272,7 +295,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 21,
+		position = 24,
 		keyName = "clanMenuIcons",
 		name = "Show clan ranks",
 		description = "Add clan rank to right click menu and next to player names"
@@ -283,7 +306,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 22,
+			position = 25,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"

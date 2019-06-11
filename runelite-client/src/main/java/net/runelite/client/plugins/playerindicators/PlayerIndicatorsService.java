@@ -81,10 +81,12 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getCallerColor());
 			}
+			else if (config.ignoreClanMembers() && isClanMember){}
 			else if (config.drawClanMemberNames() && isClanMember)
 			{
 				consumer.accept(player, config.getClanMemberColor());
 			}
+			else if (config.ignoreTeamMembers() && localPlayer.getTeam() > 0 && localPlayer.getTeam() == player.getTeam()) {}
 			else if (config.highlightTeamMembers() && localPlayer.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
 			{
 				consumer.accept(player, config.getTeamMemberColor());
