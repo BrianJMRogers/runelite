@@ -6,13 +6,10 @@ public class PlayerIndicatorUtils {
 
     public static boolean isCaller(PlayerIndicatorsConfig config, String playerName)
     {
-        log.debug(playerName + " checking if caller");
         String[] callers = config.getCallerNames().split(",");
-        log.debug("CallerNames: " + config.getCallerNames());
         for (String caller : callers)
         {
-            log.debug("compairing " + playerName + " with " + caller);
-            if (caller.equalsIgnoreCase(playerName)) return true;
+            if (caller.trim().equalsIgnoreCase(playerName)) return true;
         }
         return false;
     }
