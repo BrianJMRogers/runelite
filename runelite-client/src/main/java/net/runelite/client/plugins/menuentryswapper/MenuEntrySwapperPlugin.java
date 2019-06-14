@@ -39,7 +39,6 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.events.ConfigChanged;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.FocusChanged;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOpened;
@@ -68,7 +67,6 @@ import org.apache.commons.lang3.ArrayUtils;
 )
 
 
-@Slf4j
 public class MenuEntrySwapperPlugin extends Plugin
 {
 	private static final String CONFIGURE = "Configure";
@@ -376,14 +374,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 			return;
 		}
 
-		log.debug("Target: " + target);
-
-		if (config.swapClanMemberAttackOptions() && option.equals("attack") && targetIsClanMember(target))
-		{
-			log.debug("Swapping walk here and attack");
-			swap("walk here", option, target, true);
-		}
-		else if (option.equals("talk-to"))
+		if (option.equals("talk-to"))
 		{
 			if (config.swapPickpocket() && target.contains("h.a.m."))
 			{
@@ -466,6 +457,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("quick-travel", option, target, true);
 			}
+		}
+		else if (config.swapClanMemberAttackOptions() && option.equals("attack") && targetIsClanMember(target))
+		{
+			swap("walk here", option, target, true);
 		}
 		else if (config.swapTravel() && option.equals("pass") && target.equals("energy barrier"))
 		{
@@ -646,8 +641,8 @@ public class MenuEntrySwapperPlugin extends Plugin
 			MenuEntry entry = entries[i];
 			String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
 			String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
-			log.debug("searchIndex - entryOption: [" + entryOption + "]. option: [" + option + "]");
-			log.debug("searchIndex - entryTarget: [" + entryTarget + "]. target: [" + target + "]");
+
+			// TODO: check here if it was a unicode space that stopped things from working
 			if (entryOption.equalsIgnoreCase("walk here"))
 			{
 				return i;
@@ -678,14 +673,12 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 		int idxA = searchIndex(entries, optionA, target, strict);
 		int idxB = searchIndex(entries, optionB, target, strict);
-		log.debug("index for: " + optionA + ":" + idxA);
-		log.debug("index for: " + optionB + ":" + idxB);
+
 		if (idxA >= 0 && idxB >= 0)
 		{
 			MenuEntry entry = entries[idxA];
 			entries[idxA] = entries[idxB];
 			entries[idxB] = entry;
-			log.debug("Setting menu entries...");
 			client.setMenuEntries(entries);
 		}
 	}
