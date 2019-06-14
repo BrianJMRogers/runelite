@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
+import net.runelite.api.Player;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.MenuAction;
@@ -375,7 +376,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			return;
 		}
 
-		log.debug("\nYAO option: " + option);
 		log.debug("Target: " + target);
 
 		if (config.swapClanMemberAttackOptions() && option.equals("attack") && targetIsClanMember(target))
@@ -614,9 +614,29 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 	}
 
-	private boolean targetIsClanMember(String target)
+	private boolean targetIsClanMember(String t)
 	{
-		return true;
+		// need to remove nbsp chars from string t
+		String target = "";
+		for (int i = 0; i < t.length()-1; i++)
+		{
+			if (Character.isLetter(t.charAt(i)))
+			{
+				target += t.charAt(i);
+			} else
+			{
+				target += ' ';
+			}
+		}
+
+		for (Player player : client.getPlayers())
+		{
+			if (target.contains(player.getName().toLowerCase()) && player.isClanMember())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private int searchIndex(MenuEntry[] entries, String option, String target, boolean strict)
@@ -632,7 +652,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				return i;
 			}
-			
+
 			if (strict)
 			{
 				if (entryOption.equals(option) && entryTarget.equals(target))
