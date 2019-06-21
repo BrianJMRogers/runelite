@@ -28,8 +28,10 @@ import java.awt.Color;
 import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import net.runelite.api.Client;
 import net.runelite.api.Player;
+import net.runelite.client.util.WildernessUtils;
 
 @Singleton
 public class PlayerIndicatorsService
@@ -47,7 +49,8 @@ public class PlayerIndicatorsService
 	public void forEachPlayer(final BiConsumer<Player, Color> consumer)
 	{
 		if (!config.highlightOwnPlayer() && !config.drawClanMemberNames()
-			&& !config.highlightFriends() && !config.highlightNonClanMembers())
+			&& !config.highlightFriends() && !config.highlightNonClanMembers()
+			&& !config.highlightHittablePlayers())
 		{
 			return;
 		}
@@ -74,10 +77,16 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getFriendColor());
 			}
+			else if (config.highlightCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
+			{
+				consumer.accept(player, config.getCallerColor());
+			}
+			else if (config.ignoreClanMembers() && isClanMember){}
 			else if (config.drawClanMemberNames() && isClanMember)
 			{
 				consumer.accept(player, config.getClanMemberColor());
 			}
+			else if (config.ignoreTeamMembers() && localPlayer.getTeam() > 0 && localPlayer.getTeam() == player.getTeam()) {}
 			else if (config.highlightTeamMembers() && localPlayer.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
 			{
 				consumer.accept(player, config.getTeamMemberColor());
@@ -86,6 +95,18 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getNonClanMemberColor());
 			}
+			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != 0)
+			{
+				// determine if in a clump
+				if (config.highlightPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)
+				{
+					consumer.accept(player, config.getClumpablePlayerColor());
+				} else {
+					consumer.accept(player, config.getHittablePlayerColor());
+				}
+			}
 		}
 	}
+
+
 }

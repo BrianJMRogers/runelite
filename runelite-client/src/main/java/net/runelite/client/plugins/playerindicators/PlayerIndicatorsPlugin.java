@@ -27,12 +27,11 @@ package net.runelite.client.plugins.playerindicators;
 import com.google.inject.Provides;
 import java.awt.Color;
 import javax.inject.Inject;
-import net.runelite.api.ClanMemberRank;
+
+import net.runelite.api.*;
+
 import static net.runelite.api.ClanMemberRank.UNRANKED;
-import net.runelite.api.Client;
 import static net.runelite.api.MenuAction.*;
-import net.runelite.api.MenuEntry;
-import net.runelite.api.Player;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -41,12 +40,14 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
+import net.runelite.client.util.WildernessUtils;
 
 @PluginDescriptor(
 	name = "Player Indicators",
 	description = "Highlight players on-screen and/or on the minimap",
 	tags = {"highlight", "minimap", "overlay", "players"}
 )
+
 public class PlayerIndicatorsPlugin extends Plugin
 {
 	@Inject
@@ -117,6 +118,7 @@ public class PlayerIndicatorsPlugin extends Plugin
 		{
 			final Player localPlayer = client.getLocalPlayer();
 			Player[] players = client.getCachedPlayers();
+
 			Player player = null;
 
 			if (identifier >= 0 && identifier < players.length)
@@ -136,6 +138,14 @@ public class PlayerIndicatorsPlugin extends Plugin
 			{
 				color = config.getFriendColor();
 			}
+			else if (config.highlightCallers() && PlayerIndicatorUtils.isCaller(config, player.getName()))
+			{
+				color = config.getCallerColor();
+			}
+			else if (config.ignoreClanMembers() && player.isClanMember())
+			{
+				// do nothing (no color)
+			}
 			else if (config.drawClanMemberNames() && player.isClanMember())
 			{
 				color = config.getClanMemberColor();
@@ -146,13 +156,27 @@ public class PlayerIndicatorsPlugin extends Plugin
 					image = clanManager.getIconNumber(rank);
 				}
 			}
+			else if (config.ignoreTeamMembers() && player.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
+			{
+				// do nothing (no color)
+			}
 			else if (config.highlightTeamMembers() && player.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
 			{
 				color = config.getTeamMemberColor();
 			}
 			else if (config.highlightNonClanMembers() && !player.isClanMember())
 			{
-				color = config.getNonClanMemberColor();
+				color = config.getClanMemberColor();
+			}
+			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != -1)
+			{
+				// determine if in a clump
+				if (config.highlightPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)
+				{
+					color = config.getClumpablePlayerColor();
+				} else {
+					color = config.getHittablePlayerColor();
+				}
 			}
 
 			if (image != -1 || color != null)

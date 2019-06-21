@@ -32,6 +32,17 @@ import net.runelite.client.config.ConfigItem;
 public interface MenuEntrySwapperConfig extends Config
 {
 	@ConfigItem(
+		position = -3,
+		keyName = "swapClanMemberAttackOptions",
+		name = "Swap clan member attack options",
+		description = "Swap \"walk here\" with \"attack\"."
+	)
+	default boolean swapClanMemberAttackOptions()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		position = -2,
 		keyName = "shiftClickCustomization",
 		name = "Customizable shift-click",
@@ -99,7 +110,7 @@ public interface MenuEntrySwapperConfig extends Config
 	)
 	default boolean swapContract()
 	{
-		return true; 
+		return true;
 	}
 
 	@ConfigItem(
@@ -122,7 +133,7 @@ public interface MenuEntrySwapperConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(		
+	@ConfigItem(
 		keyName = "swapDarkMage",
 		name = "Repairs",
 		description = "Swap Talk-to with Repairs for Dark Mage"
