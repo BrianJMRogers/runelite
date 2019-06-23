@@ -616,25 +616,34 @@ public class MenuEntrySwapperPlugin extends Plugin
 	private boolean targetIsClanMember(String t)
 	{
 		// need to remove nbsp chars from string t
+
 		String target = "";
 		for (int i = 0; i < t.length()-1; i++)
 		{
-			if (Character.isLetter(t.charAt(i)))
+			if (Character.isWhitespace(t.charAt(i)))
 			{
+				log.debug("Whitespace char: [" + t.charAt(i) + "]. keyboard space: [ ]");
+			}
+			if (Character.isLetter(t.charAt(i)) || Character.isDigit(t.charAt(i)))
+			{
+				log.debug("Valid char: " + t.charAt(i));
 				target += t.charAt(i);
 			} else
 			{
+				log.debug("Replacing [" + t.charAt(i) + "] with space char");
 				target += ' ';
 			}
 		}
-
+		log.debug("determining if clan memeber: [" + t + "][" + target + "]");
 		for (Player player : client.getPlayers())
 		{
 			if (target.contains(player.getName().toLowerCase()) && player.isClanMember())
 			{
+				log.debug("returning true for " + target);
 				return true;
 			}
 		}
+		log.debug("returning false for " + target);
 		return false;
 	}
 
