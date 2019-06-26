@@ -30,7 +30,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import net.runelite.api.Client;
+import net.runelite.api.Item;
+import net.runelite.api.InventoryID;
+import net.runelite.api.ItemComposition;
 import net.runelite.api.Player;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.WildernessUtils;
 
 @Singleton
@@ -48,13 +52,14 @@ public class PlayerIndicatorsService
 
 	public void forEachPlayer(final BiConsumer<Player, Color> consumer)
 	{
+		/* removing since there are so many new ones
 		if (!config.highlightOwnPlayer() && !config.drawClanMemberNames()
 			&& !config.highlightFriends() && !config.highlightNonClanMembers()
 			&& !config.highlightHittablePlayers())
 		{
 			return;
 		}
-
+		*/
 		final Player localPlayer = client.getLocalPlayer();
 
 		for (Player player : client.getPlayers())
@@ -68,7 +73,17 @@ public class PlayerIndicatorsService
 
 			if (player == localPlayer)
 			{
-				if (config.highlightOwnPlayer())
+				if (config.warnUnchargedGlory())
+				{
+					final Item[] equipment = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
+					for (Item item : equipment) {
+						if (item.getId() == 1704) // uncharged glory as per ItemID.java
+						{
+							consumer.accept(player, config.getUnchargedGloryWarningColor());
+						}
+					}
+				}
+				else if (config.highlightOwnPlayer())
 				{
 					consumer.accept(player, config.getOwnPlayerColor());
 				}

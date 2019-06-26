@@ -252,6 +252,28 @@ public interface PlayerIndicatorsConfig extends Config
 
 	@ConfigItem(
 		position = 20,
+		keyName = "unchargedGlory",
+		name = "Uncharged Glory Warning",
+		description = "Draw overlay yourself if you're wearing an uncharged glory - \"draw tiles under players\" MUST be enabled"
+	)
+	default boolean warnUnchargedGlory()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 21,
+			keyName = "unchargedGloryWarningColor",
+			name = "Uncharged Glory Warning Color",
+			description = "Color the overlay on your character when you wear an uncharged glory"
+	)
+	default Color getUnchargedGloryWarningColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		position = 22,
 		keyName = "drawPlayerTiles",
 		name = "Draw tiles under players",
 		description = "Configures whether or not tiles under highlighted players should be drawn"
@@ -262,7 +284,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 21,
+		position = 23,
 		keyName = "playerNamePosition",
 		name = "Name position",
 		description = "Configures the position of drawn player names, or if they should be disabled"
@@ -273,7 +295,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 22,
+		position = 24,
 		keyName = "drawMinimapNames",
 		name = "Draw names on minimap",
 		description = "Configures whether or not minimap names for players with rendered names should be drawn"
@@ -284,7 +306,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 23,
+		position = 25,
 		keyName = "colorPlayerMenu",
 		name = "Colorize player menu",
 		description = "Color right click menu for players"
@@ -295,7 +317,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 24,
+		position = 26,
 		keyName = "clanMenuIcons",
 		name = "Show clan ranks",
 		description = "Add clan rank to right click menu and next to player names"
@@ -306,7 +328,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 25,
+			position = 27,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"
@@ -315,8 +337,4 @@ public interface PlayerIndicatorsConfig extends Config
 	{
 		return true;
 	}
-
-
-
-
 }
