@@ -33,13 +33,13 @@ public interface MenuEntrySwapperConfig extends Config
 {
 	@ConfigItem(
 		position = -3,
-		keyName = "swapClanMemberAttackOptions",
-		name = "Swap clan member attack options",
-		description = "Swap \"walk here\" with \"attack\"."
+		keyName = "removeClanMemberAttackOption",
+		name = "Remove Clan Member Attack Option",
+		description = "Removes the \"Attack\" option from clan members"
 	)
 	default boolean swapClanMemberAttackOptions()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(

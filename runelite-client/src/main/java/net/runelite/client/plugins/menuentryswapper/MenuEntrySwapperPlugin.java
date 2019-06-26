@@ -28,18 +28,20 @@ package net.runelite.client.plugins.menuentryswapper;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
 import java.util.Set;
+import java.util.Vector;
+import java.util.Stack;
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
-import net.runelite.api.Player;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
+import net.runelite.api.Player;
 import net.runelite.api.events.ConfigChanged;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.FocusChanged;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOpened;
@@ -66,8 +68,6 @@ import org.apache.commons.lang3.ArrayUtils;
 	tags = {"npcs", "inventory", "items", "objects"},
 	enabledByDefault = false
 )
-
-
 
 @Slf4j
 public class MenuEntrySwapperPlugin extends Plugin
@@ -365,6 +365,67 @@ public class MenuEntrySwapperPlugin extends Plugin
 			return;
 		}
 
+		if (config.swapClanMemberAttackOptions())
+		{
+			log.debug("swapClanMemberAttackOptions is turned on");
+			String eventTarget = Text.removeTags(event.getTarget().toLowerCase());
+			if (targetIsClanMember(eventTarget))
+			{
+				String entryTarget = "";
+				log.debug("targetIsClanMember so we're inside");
+				Vector<MenuEntry> entriesWithoutAttack = new Vector<MenuEntry>();
+				MenuEntry[] entries = client.getMenuEntries();
+
+				for (MenuEntry entry : entries)
+				{
+					entryTarget = Text.removeTags(entry.getTarget().toLowerCase());
+					log.debug("Comparing [" + event.getTarget() + "][" + entry.getTarget() + " and [" + event.getOption() + "][" + entry.getOption() + "]");
+					if (!eventTarget.equals(entryTarget) || // 1) if this is NOT the item
+							!event.getOption().equals(entry.getOption()) || //    that was just added
+							!entry.getOption().toLowerCase().equals("attack") || // 2) OR it is NOT "attack"
+							!targetIsClanMember(Text.removeTags(event.getTarget().toLowerCase()))) // 3) or the target is NOT a clan member
+					{
+						log.debug("adding to entriesWithoutAttack");
+						entriesWithoutAttack.add(entry);
+					}
+				}
+				log.debug("setting menu options");
+				client.setMenuEntries(entriesWithoutAttack.toArray(new MenuEntry[entriesWithoutAttack.size()]));
+			}
+			/*
+
+			Player[] players = client.getCachedPlayers();
+			Player player = null;
+			int identifier = event.getIdentifier();
+			if (identifier >= 0 && identifier < players.length)
+			{
+				player = players[identifier];
+			}
+			if (player == null)
+			{
+				log.debug("NULL");
+			}
+			else if (player != null && player.isClanMember())
+			{
+				log.debug(player.getName() + " is a clan member");
+				Vector<MenuEntry> entriesWithoutAttack = new Vector<MenuEntry>();
+				MenuEntry[] entries = client.getMenuEntries();
+				for (MenuEntry entry : entries)
+				{
+					if (!Text.removeTags(entry.getOption()).toLowerCase().equals("attack"))
+					{
+						entriesWithoutAttack.add(entry);
+						log.debug("adding: " + Text.removeTags(entry.getOption().toLowerCase()) + " - " + Text.removeTags(entry.getTarget().toLowerCase()));
+					}
+					else {
+						log.debug("Removing: " + Text.removeTags(entry.getOption().toLowerCase()) + " - " + Text.removeTags(entry.getTarget().toLowerCase()));
+					}
+				}
+				client.setMenuEntries(entriesWithoutAttack.toArray(new MenuEntry[entriesWithoutAttack.size()]));
+			}
+			*/
+		}
+
 		final int eventId = event.getIdentifier();
 		final String option = Text.removeTags(event.getOption()).toLowerCase();
 		final String target = Text.removeTags(event.getTarget()).toLowerCase();
@@ -377,7 +438,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 			return;
 		}
 
-		else if (option.equals("talk-to"))
+		if (option.equals("talk-to"))
 		{
 			if (config.swapPickpocket() && target.contains("h.a.m."))
 			{
@@ -424,7 +485,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("trade", option, target, true);
 				swap("trade-with", option, target, true);
-				swap("shop", option, target, true);
 			}
 
 			if (config.claimSlime() && target.equals("robin"))
@@ -461,10 +521,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("quick-travel", option, target, true);
 			}
-		}
-		else if (config.swapClanMemberAttackOptions() && option.equals("attack") && targetIsClanMember(target))
-		{
-			swap("walk here", option, target, false);
 		}
 		else if (config.swapTravel() && option.equals("pass") && target.equals("energy barrier"))
 		{
@@ -590,6 +646,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("use", option, target, true);
 		}
+
 	}
 
 	@Subscribe
@@ -622,19 +679,19 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			if (Character.isWhitespace(t.charAt(i)))
 			{
-				log.debug("Whitespace char: [" + t.charAt(i) + "]. keyboard space: [ ]");
+				//log.debug("Whitespace char: [" + t.charAt(i) + "]. keyboard space: [ ]");
 			}
 			if (Character.isLetter(t.charAt(i)) || Character.isDigit(t.charAt(i)))
 			{
-				log.debug("Valid char: " + t.charAt(i));
+				//log.debug("Valid char: " + t.charAt(i));
 				target += t.charAt(i);
 			} else
 			{
-				log.debug("Replacing [" + t.charAt(i) + "] with space char");
+				//log.debug("Replacing [" + t.charAt(i) + "] with space char");
 				target += ' ';
 			}
 		}
-		log.debug("determining if clan memeber: [" + t + "][" + target + "]");
+		//log.debug("determining if clan memeber: [" + t + "][" + target + "]");
 		for (Player player : client.getPlayers())
 		{
 			if (target.contains(player.getName().toLowerCase()) && player.isClanMember())
@@ -649,18 +706,11 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	private int searchIndex(MenuEntry[] entries, String option, String target, boolean strict)
 	{
-		String possibleClanMate ="";
 		for (int i = entries.length - 1; i >= 0; i--)
 		{
 			MenuEntry entry = entries[i];
 			String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
 			String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
-			if (entryOption.equals("attack"))
-			{
-				possibleClanMate = entryTarget;
-			}
-			log.debug("searchIndex - entryOption: [" + entryOption + "]. option: [" + option + "]");
-			log.debug("searchIndex - entryTarget: [" + entryTarget + "]. target: [" + target + "]");
 
 			if (strict)
 			{
@@ -672,10 +722,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			else
 			{
 				if (entryOption.contains(option.toLowerCase()) && entryTarget.equals(target))
-				{
-					return i;
-				}
-				else if (entryOption.contains(option.toLowerCase()) && possibleClanMate.contains(target))
 				{
 					return i;
 				}
@@ -691,14 +737,13 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 		int idxA = searchIndex(entries, optionA, target, strict);
 		int idxB = searchIndex(entries, optionB, target, strict);
-		log.debug("index for: " + optionA + ":" + idxA);
-		log.debug("index for: " + optionB + ":" + idxB);
+
 		if (idxA >= 0 && idxB >= 0)
 		{
 			MenuEntry entry = entries[idxA];
 			entries[idxA] = entries[idxB];
 			entries[idxB] = entry;
-			log.debug("Setting menu entries...");
+
 			client.setMenuEntries(entries);
 		}
 	}
