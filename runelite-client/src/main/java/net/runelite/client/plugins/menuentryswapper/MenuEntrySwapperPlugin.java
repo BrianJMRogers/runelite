@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.Stack;
 import javax.inject.Inject;
-import lombok.extern.slf4j.Slf4j;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
@@ -69,7 +68,6 @@ import org.apache.commons.lang3.ArrayUtils;
 	enabledByDefault = false
 )
 
-@Slf4j
 public class MenuEntrySwapperPlugin extends Plugin
 {
 	private static final String CONFIGURE = "Configure";
@@ -367,63 +365,26 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 		if (config.swapClanMemberAttackOptions())
 		{
-			log.debug("swapClanMemberAttackOptions is turned on");
 			String eventTarget = Text.removeTags(event.getTarget().toLowerCase());
 			if (targetIsClanMember(eventTarget))
 			{
 				String entryTarget = "";
-				log.debug("targetIsClanMember so we're inside");
 				Vector<MenuEntry> entriesWithoutAttack = new Vector<MenuEntry>();
 				MenuEntry[] entries = client.getMenuEntries();
 
 				for (MenuEntry entry : entries)
 				{
 					entryTarget = Text.removeTags(entry.getTarget().toLowerCase());
-					log.debug("Comparing [" + event.getTarget() + "][" + entry.getTarget() + " and [" + event.getOption() + "][" + entry.getOption() + "]");
 					if (!eventTarget.equals(entryTarget) || // 1) if this is NOT the item
 							!event.getOption().equals(entry.getOption()) || //    that was just added
 							!entry.getOption().toLowerCase().equals("attack") || // 2) OR it is NOT "attack"
 							!targetIsClanMember(Text.removeTags(event.getTarget().toLowerCase()))) // 3) or the target is NOT a clan member
 					{
-						log.debug("adding to entriesWithoutAttack");
 						entriesWithoutAttack.add(entry);
-					}
-				}
-				log.debug("setting menu options");
-				client.setMenuEntries(entriesWithoutAttack.toArray(new MenuEntry[entriesWithoutAttack.size()]));
-			}
-			/*
-
-			Player[] players = client.getCachedPlayers();
-			Player player = null;
-			int identifier = event.getIdentifier();
-			if (identifier >= 0 && identifier < players.length)
-			{
-				player = players[identifier];
-			}
-			if (player == null)
-			{
-				log.debug("NULL");
-			}
-			else if (player != null && player.isClanMember())
-			{
-				log.debug(player.getName() + " is a clan member");
-				Vector<MenuEntry> entriesWithoutAttack = new Vector<MenuEntry>();
-				MenuEntry[] entries = client.getMenuEntries();
-				for (MenuEntry entry : entries)
-				{
-					if (!Text.removeTags(entry.getOption()).toLowerCase().equals("attack"))
-					{
-						entriesWithoutAttack.add(entry);
-						log.debug("adding: " + Text.removeTags(entry.getOption().toLowerCase()) + " - " + Text.removeTags(entry.getTarget().toLowerCase()));
-					}
-					else {
-						log.debug("Removing: " + Text.removeTags(entry.getOption().toLowerCase()) + " - " + Text.removeTags(entry.getTarget().toLowerCase()));
 					}
 				}
 				client.setMenuEntries(entriesWithoutAttack.toArray(new MenuEntry[entriesWithoutAttack.size()]));
 			}
-			*/
 		}
 
 		final int eventId = event.getIdentifier();
@@ -677,30 +638,21 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String target = "";
 		for (int i = 0; i < t.length()-1; i++)
 		{
-			if (Character.isWhitespace(t.charAt(i)))
-			{
-				//log.debug("Whitespace char: [" + t.charAt(i) + "]. keyboard space: [ ]");
-			}
 			if (Character.isLetter(t.charAt(i)) || Character.isDigit(t.charAt(i)))
 			{
-				//log.debug("Valid char: " + t.charAt(i));
 				target += t.charAt(i);
 			} else
 			{
-				//log.debug("Replacing [" + t.charAt(i) + "] with space char");
 				target += ' ';
 			}
 		}
-		//log.debug("determining if clan memeber: [" + t + "][" + target + "]");
 		for (Player player : client.getPlayers())
 		{
 			if (target.contains(player.getName().toLowerCase()) && player.isClanMember())
 			{
-				log.debug("returning true for " + target);
 				return true;
 			}
 		}
-		log.debug("returning false for " + target);
 		return false;
 	}
 
