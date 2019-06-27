@@ -91,8 +91,26 @@ public class PlayerIndicatorsOverlay extends Overlay
 			default:
 				zOffset = actor.getLogicalHeight() + ACTOR_OVERHEAD_TEXT_MARGIN;
 		}
+		String name = "";
 
-		String name = Text.sanitize(actor.getName()) + " (" + actor.getCombatLevel() + ")";
+		if (config.warnUnchargedGlory() && actor == client.getLocalPlayer())
+		{
+			final Item[] equipment = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
+			for (Item item : equipment) {
+				if (item.getId() == 1704) // uncharged glory as per ItemID.java
+				{
+					name = "WARNING - YOUR GLORY IS UNCHARGED";
+					break;
+				}
+			}
+		}
+
+		// if it isn't set, the glory check didn't pass
+		if (name.equals(""))
+		{
+			name = Text.sanitize(actor.getName()) + " (" + actor.getCombatLevel() + ")";
+		}
+
 
 		Point textLocation = actor.getCanvasTextLocation(graphics, name, zOffset);
 

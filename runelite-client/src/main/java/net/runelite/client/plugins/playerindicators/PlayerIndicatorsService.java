@@ -80,6 +80,7 @@ public class PlayerIndicatorsService
 						if (item.getId() == 1704) // uncharged glory as per ItemID.java
 						{
 							consumer.accept(player, config.getUnchargedGloryWarningColor());
+							break;
 						}
 					}
 				}
