@@ -252,22 +252,22 @@ public interface PlayerIndicatorsConfig extends Config
 
 	@ConfigItem(
 		position = 20,
-		keyName = "unchargedGlory",
-		name = "Uncharged Glory Warning",
-		description = "Draw overlay yourself if you're wearing an uncharged glory - \"draw tiles under players\" MUST be enabled"
+		keyName = "unchargedDragonstoneJewellery",
+		name = "Warn Uncharged Dragonstone",
+		description = "Draw overlay yourself if you're wearing uncharged dragonstone jewellery - \"draw tiles under players\" MUST be enabled"
 	)
-	default boolean warnUnchargedGlory()
+	default boolean warnUnchargedDragonstone()
 	{
 		return false;
 	}
 
 	@ConfigItem(
 			position = 21,
-			keyName = "unchargedGloryWarningColor",
-			name = "Uncharged Glory Warning Color",
-			description = "Color the overlay on your character when you wear an uncharged glory"
+			keyName = "unchargedDragonstoneWarningColor",
+			name = "Uncharged Dragonstone Warning Color",
+			description = "Color the overlay on your character when you wear uncharged dragonstone jewellery"
 	)
-	default Color getUnchargedGloryWarningColor()
+	default Color getUnchargedDragonstoneColor()
 	{
 		return Color.RED;
 	}

@@ -73,16 +73,9 @@ public class PlayerIndicatorsService
 
 			if (player == localPlayer)
 			{
-				if (config.warnUnchargedGlory())
+				if (config.warnUnchargedDragonstone() && PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
 				{
-					final Item[] equipment = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
-					for (Item item : equipment) {
-						if (item.getId() == 1704) // uncharged glory as per ItemID.java
-						{
-							consumer.accept(player, config.getUnchargedGloryWarningColor());
-							break;
-						}
-					}
+					consumer.accept(player, config.getUnchargedDragonstoneColor());
 				}
 				else if (config.highlightOwnPlayer())
 				{

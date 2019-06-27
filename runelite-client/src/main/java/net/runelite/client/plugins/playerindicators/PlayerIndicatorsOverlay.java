@@ -91,18 +91,13 @@ public class PlayerIndicatorsOverlay extends Overlay
 			default:
 				zOffset = actor.getLogicalHeight() + ACTOR_OVERHEAD_TEXT_MARGIN;
 		}
-		String name = "";
 
-		if (config.warnUnchargedGlory() && actor == client.getLocalPlayer())
+		String name = "";
+		if (config.warnUnchargedDragonstone() &&
+				actor == client.getLocalPlayer() &&
+				PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
 		{
-			final Item[] equipment = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
-			for (Item item : equipment) {
-				if (item.getId() == 1704) // uncharged glory as per ItemID.java
-				{
-					name = "WARNING - YOUR GLORY IS UNCHARGED";
-					break;
-				}
-			}
+			name = "YOUR DRAGONSTONE ITEM HAS NO CHARGES";
 		}
 
 		// if it isn't set, the glory check didn't pass
