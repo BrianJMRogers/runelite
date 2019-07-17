@@ -5,9 +5,11 @@ import net.runelite.api.Item;
 import net.runelite.api.ItemID;
 import net.runelite.api.InventoryID;
 import net.runelite.api.ItemComposition;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
 
 public class PlayerIndicatorUtils {
-
+    private static ConcurrentHashMap<String,String> callerTargets = new ConcurrentHashMap<String,String>();
     public static boolean isCaller(PlayerIndicatorsConfig config, String playerName)
     {
         String[] callers = config.getCallerNames().split(",");
@@ -35,4 +37,18 @@ public class PlayerIndicatorUtils {
       return false;
     }
 
+    public static void removeTarget(String caller)
+    {
+      callerTargets.remove(caller);
+    }
+
+    public static void addTarget(String caller, String target)
+    {
+      callerTargets.put(caller, target.toLowerCase());
+    }
+
+    public static Collection<String> getTargets()
+    {
+      return callerTargets.values();
+    }
 }

@@ -252,6 +252,39 @@ public interface PlayerIndicatorsConfig extends Config
 
 	@ConfigItem(
 		position = 20,
+		keyName = "listenForTargetsFromCaller",
+		name = "Listen for Targets From Caller",
+		description = "Check this to highlight players your caller(s) attacks"
+	)
+	default boolean listenForCalls()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 21,
+			keyName = "callerTargetColor",
+			name = "Caller target color",
+			description = "Color of the caller(s)'s target'"
+	)
+	default Color getCallerTargetColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		position = 22,
+		keyName = "iAmCaller",
+		name = "I Am Caller",
+		description = "Check this for your attacks to me called out"
+	)
+	default boolean iAmCaller()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 23,
 		keyName = "unchargedDragonstoneJewellery",
 		name = "Warn Uncharged Dragonstone",
 		description = "Draw overlay yourself if you're wearing uncharged dragonstone jewellery - \"draw tiles under players\" MUST be enabled"
@@ -262,7 +295,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 21,
+			position = 24,
 			keyName = "unchargedDragonstoneWarningColor",
 			name = "Uncharged Dragonstone Warning Color",
 			description = "Color the overlay on your character when you wear uncharged dragonstone jewellery"
@@ -273,7 +306,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 22,
+		position = 25,
 		keyName = "drawPlayerTiles",
 		name = "Draw tiles under players",
 		description = "Configures whether or not tiles under highlighted players should be drawn"
@@ -284,7 +317,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 23,
+		position = 26,
 		keyName = "playerNamePosition",
 		name = "Name position",
 		description = "Configures the position of drawn player names, or if they should be disabled"
@@ -295,7 +328,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 24,
+		position = 27,
 		keyName = "drawMinimapNames",
 		name = "Draw names on minimap",
 		description = "Configures whether or not minimap names for players with rendered names should be drawn"
@@ -306,7 +339,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 25,
+		position = 28,
 		keyName = "colorPlayerMenu",
 		name = "Colorize player menu",
 		description = "Color right click menu for players"
@@ -317,7 +350,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 26,
+		position = 29,
 		keyName = "clanMenuIcons",
 		name = "Show clan ranks",
 		description = "Add clan rank to right click menu and next to player names"
@@ -328,7 +361,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 27,
+			position = 30,
 			keyName = "showWildernessThreshold",
 			name = "Show wilderness Threshold",
 			description = "Draw the wilderness level above which both players must be in order to be hittable"

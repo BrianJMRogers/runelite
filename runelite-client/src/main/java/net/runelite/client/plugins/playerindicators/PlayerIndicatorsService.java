@@ -36,8 +36,10 @@ import net.runelite.api.ItemComposition;
 import net.runelite.api.Player;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.WildernessUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Singleton
+@Slf4j
 public class PlayerIndicatorsService
 {
 	private final Client client;
@@ -71,6 +73,11 @@ public class PlayerIndicatorsService
 
 			boolean isClanMember = player.isClanMember();
 
+			for (String t : PlayerIndicatorUtils.getTargets())
+			{
+				log.debug("Service: " + player.getName() + " == " + t + " : " + t.equals(player.getName().toLowerCase()));
+			}
+
 			if (player == localPlayer)
 			{
 				if (config.warnUnchargedDragonstone() && PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
@@ -99,6 +106,11 @@ public class PlayerIndicatorsService
 			else if (config.highlightTeamMembers() && localPlayer.getTeam() > 0 && localPlayer.getTeam() == player.getTeam())
 			{
 				consumer.accept(player, config.getTeamMemberColor());
+			}
+			else if (config.listenForCalls() && PlayerIndicatorUtils.getTargets().contains(player.getName().toLowerCase()))
+			{
+				log.debug("Accepting target for player " + player.getName() + " in indicator service...adding to consumer");
+				consumer.accept(player, config.getCallerTargetColor());
 			}
 			else if (config.highlightNonClanMembers() && !isClanMember)
 			{

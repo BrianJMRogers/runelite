@@ -22,23 +22,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.tileindicators;
+package net.runelite.client.plugins.pvpindicators;
 
-import java.awt.Color;
-import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("PvpIndicators")
+@ConfigGroup("pvpindicators")
 public interface PvpIndicatorsConfig extends Config
 {
 	@ConfigItem(
+		position = 0,
 		keyName = "iAmCaller",
 		name = "I Am Caller",
 		description = "Check this for your attacks to me called out"
 	)
 	default boolean iAmCaller()
+	{
+		return false;
+	}
+	@ConfigItem(
+		position = 1,
+		keyName = "listenForCalls",
+		name = "Listen for calls",
+		description = "Check this to highlight players your caller(s) attacks"
+	)
+	default boolean listenForCalls()
 	{
 		return false;
 	}

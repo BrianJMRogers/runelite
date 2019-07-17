@@ -30,26 +30,38 @@ import javax.inject.Inject;
 
 import net.runelite.api.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collection;
+import net.runelite.client.util.Text;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.events.LocalPlayerDeath;
+import net.runelite.api.events.MenuOptionClicked;
 import static net.runelite.api.ClanMemberRank.UNRANKED;
 import static net.runelite.api.MenuAction.*;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ClanManager;
+import net.runelite.client.plugins.playerindicators.PlayerIndicatorUtils;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.WildernessUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @PluginDescriptor(
 	name = "Player Indicators",
 	description = "Highlight players on-screen and/or on the minimap",
 	tags = {"highlight", "minimap", "overlay", "players"}
 )
-
+@Slf4j
 public class PlayerIndicatorsPlugin extends Plugin
 {
+	private String DEATH_MESSAGE = "!Oh Dear, I Am Dead!";
+
 	@Inject
 	private OverlayManager overlayManager;
 
@@ -133,6 +145,10 @@ public class PlayerIndicatorsPlugin extends Plugin
 
 			int image = -1;
 			Color color = null;
+			for (String t : PlayerIndicatorUtils.getTargets())
+			{
+				log.debug("plugin: " + player.getName().toLowerCase() + " == " + t + " : " + t.equals(player.getName()));
+			}
 
 			if (config.highlightFriends() && player.isFriend())
 			{
@@ -167,6 +183,11 @@ public class PlayerIndicatorsPlugin extends Plugin
 			else if (config.highlightNonClanMembers() && !player.isClanMember())
 			{
 				color = config.getClanMemberColor();
+			}
+			else if (config.listenForCalls() && PlayerIndicatorUtils.getTargets().contains(player.getName().toLowerCase()))
+			{
+				log.debug("plugin setting color for player " + player.getName());
+				color = config.getCallerTargetColor();
 			}
 			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != -1)
 			{
@@ -205,5 +226,64 @@ public class PlayerIndicatorsPlugin extends Plugin
 				client.setMenuEntries(menuEntries);
 			}
 		}
+	}
+
+	@Subscribe
+	public void onLocalPlayerDeath(LocalPlayerDeath death)
+	{
+		if (config.iAmCaller())
+		{
+			client.runScript(133377, "/" + DEATH_MESSAGE);
+		}
+	}
+
+	@Subscribe
+	public void onChatMessage(ChatMessage chatMessage)
+	{
+		if (chatMessage.getType() == ChatMessageType.FRIENDSCHAT &&
+				config.listenForCalls())
+		{
+			String target = chatMessage.getMessage();
+			if (target.charAt(0) == '!')
+			{
+				// if death message, remove call
+				if (target.equals(DEATH_MESSAGE))
+				{
+					log.debug(target + "==" + DEATH_MESSAGE);
+					PlayerIndicatorUtils.removeTarget(chatMessage.getName());
+				}
+
+				// else add call
+				else
+				{
+					PlayerIndicatorUtils.addTarget(chatMessage.getName(), target.substring(1, target.length() - 1));
+					log.debug("Target list: ");
+					for (String t : PlayerIndicatorUtils.getTargets())
+					{
+						log.debug("\ttarget: " + t);
+					}
+				}
+			}
+		}
+	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		log.debug("Menu option clicked...");
+		if (!config.iAmCaller())
+		{
+			log.debug("Not a caller...");
+			return;
+		}
+
+		if (event.getMenuOption().equals("Attack"))
+		{
+			String target = Text.removeTags(event.getMenuTarget());
+			target = target.substring(0, target.indexOf("(") - 1);
+			client.runScript(133377, "/!" + target);
+			log.debug("Clicked attack!");
+		}
+		return;
 	}
 }
