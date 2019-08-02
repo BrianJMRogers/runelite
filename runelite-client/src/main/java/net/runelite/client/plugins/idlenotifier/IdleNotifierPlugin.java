@@ -138,7 +138,8 @@ public class IdleNotifierPlugin extends Plugin
 			case WOODCUTTING_DRAGON:
 			case WOODCUTTING_INFERNAL:
 			case WOODCUTTING_3A_AXE:
-				/* Cooking(Fire, Range) */
+			case WOODCUTTING_CRYSTAL:
+			/* Cooking(Fire, Range) */
 			case COOKING_FIRE:
 			case COOKING_RANGE:
 			case COOKING_WINE:
@@ -157,7 +158,7 @@ public class IdleNotifierPlugin extends Plugin
 			case CRAFTING_LEATHER:
 			case CRAFTING_POTTERS_WHEEL:
 			case CRAFTING_POTTERY_OVEN:
-			/* Fletching(Cutting, Stringing) */
+			/* Fletching(Cutting, Stringing, Adding feathers and heads) */
 			case FLETCHING_BOW_CUTTING:
 			case FLETCHING_STRING_NORMAL_SHORTBOW:
 			case FLETCHING_STRING_OAK_SHORTBOW:
@@ -171,7 +172,9 @@ public class IdleNotifierPlugin extends Plugin
 			case FLETCHING_STRING_MAPLE_LONGBOW:
 			case FLETCHING_STRING_YEW_LONGBOW:
 			case FLETCHING_STRING_MAGIC_LONGBOW:
-				/* Smithing(Anvil, Furnace, Cannonballs */
+			case FLETCHING_ATTACH_FEATHERS_TO_ARROWSHAFT:
+			case FLETCHING_ATTACH_HEADS:
+			/* Smithing(Anvil, Furnace, Cannonballs */
 			case SMITHING_ANVIL:
 			case SMITHING_SMELTING:
 			case SMITHING_CANNONBALL:
@@ -187,9 +190,11 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_ADAMANT_PICKAXE:
 			case MINING_RUNE_PICKAXE:
 			case MINING_DRAGON_PICKAXE:
-			case MINING_DRAGON_PICKAXE_ORN:
+			case MINING_DRAGON_PICKAXE_UPGRADED:
+			case MINING_DRAGON_PICKAXE_OR:
 			case MINING_INFERNAL_PICKAXE:
 			case MINING_3A_PICKAXE:
+			case MINING_CRYSTAL_PICKAXE:
 			case DENSE_ESSENCE_CHIPPING:
 			case DENSE_ESSENCE_CHISELING:
 				/* Mining(Motherlode) */
@@ -201,10 +206,12 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_MOTHERLODE_ADAMANT:
 			case MINING_MOTHERLODE_RUNE:
 			case MINING_MOTHERLODE_DRAGON:
-			case MINING_MOTHERLODE_DRAGON_ORN:
+			case MINING_MOTHERLODE_DRAGON_UPGRADED:
+			case MINING_MOTHERLODE_DRAGON_OR:
 			case MINING_MOTHERLODE_INFERNAL:
 			case MINING_MOTHERLODE_3A:
-				/* Herblore */
+			case MINING_MOTHERLODE_CRYSTAL:
+			/* Herblore */
 			case HERBLORE_PESTLE_AND_MORTAR:
 			case HERBLORE_POTIONMAKING:
 			case HERBLORE_MAKE_TAR:
