@@ -94,6 +94,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "swapBrimhaven",
+		name = "Brimhaven",
+		description = "Swap Brimhaven with Captain Barnaby on Ardougne docks"
+	)
+	default boolean swapBrimhaven()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "swapBones",
 		name = "Bury",
 		description = "Swap Bury with Use on Bones"
@@ -259,6 +269,16 @@ public interface MenuEntrySwapperConfig extends Config
 		description = "Swap Check with Reset on box trap"
 	)
 	default boolean swapBoxTrap()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "swapRimmington",
+		name = "Rimmington",
+		description = "Swap Rimmington with Captain Barnaby on Ardougne docks"
+	)
+	default boolean swapRimmington()
 	{
 		return true;
 	}
