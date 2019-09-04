@@ -23,11 +23,11 @@ public class PlayerIndicatorUtils {
       final Item[] equipment = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
 			for (Item item : equipment) {
 				if (item.getId() == ItemID.AMULET_OF_GLORY ||
-						item.getId() == ItemID.AMULET_OF_GLORY_T ||
-						item.getId() == ItemID.RING_OF_WEALTH ||
-						item.getId() == ItemID.RING_OF_WEALTH_I ||
-            item.getId() == ItemID.COMBAT_BRACELET ||
-            item.getId() == ItemID.SKILLS_NECKLACE)
+                    item.getId() == ItemID.AMULET_OF_GLORY_T ||
+                    item.getId() == ItemID.RING_OF_WEALTH ||
+                    item.getId() == ItemID.RING_OF_WEALTH_I ||
+                    item.getId() == ItemID.COMBAT_BRACELET ||
+                    item.getId() == ItemID.SKILLS_NECKLACE)
 				{
 					return true;
 				}
