@@ -1,7 +1,10 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-
-*/target/**
-
+target
+nbactions.xml
+nb-configuration.xml
+/nbproject/
+project.properties
+*.iml
+.idea/
+.project
+.settings/
+.classpath
