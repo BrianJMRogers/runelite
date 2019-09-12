@@ -25,8 +25,10 @@
  */
 package net.runelite.client.plugins.menuentryswapper;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.Stack;
@@ -133,6 +135,8 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	@Setter
 	private boolean shiftModifier = false;
+
+	private final ArrayListMultimap<String, Integer> optionIndexes = ArrayListMultimap.create();
 
 	@Provides
 	MenuEntrySwapperConfig provideConfig(ConfigManager configManager)
@@ -358,6 +362,16 @@ public class MenuEntrySwapperPlugin extends Plugin
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
+		final String option = Text.removeTags(event.getOption()).toLowerCase();
+
+		if (event.getType() == MenuAction.CANCEL.getId())
+		{
+			optionIndexes.clear();
+		}
+
+		int size = optionIndexes.size();
+		optionIndexes.put(option, size);
+
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
@@ -388,7 +402,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 
 		final int eventId = event.getIdentifier();
-		final String option = Text.removeTags(event.getOption()).toLowerCase();
 		final String target = Text.removeTags(event.getTarget()).toLowerCase();
 		final NPC hintArrowNpc = client.getHintArrowNpc();
 
@@ -687,21 +700,33 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	private int searchIndex(MenuEntry[] entries, String option, String target, boolean strict)
 	{
-		for (int i = entries.length - 1; i >= 0; i--)
+		if (strict)
 		{
-			MenuEntry entry = entries[i];
-			String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
-			String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+			List<Integer> indexes = optionIndexes.get(option);
 
-			if (strict)
+			// We want the last index which matches the target, as that is what is top-most
+			// on the menu
+			for (int i = indexes.size() - 1; i >= 0; --i)
 			{
-				if (entryOption.equals(option) && entryTarget.equals(target))
+				int idx = indexes.get(i);
+				MenuEntry entry = entries[idx];
+				String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+
+				if (entryTarget.equals(target))
 				{
-					return i;
+					return idx;
 				}
 			}
-			else
+		}
+		else
+		{
+			// Without strict matching we have to iterate all entries...
+			for (int i = entries.length - 1; i >= 0; i--)
 			{
+				MenuEntry entry = entries[i];
+				String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
+				String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+
 				if (entryOption.contains(option.toLowerCase()) && entryTarget.equals(target))
 				{
 					return i;
