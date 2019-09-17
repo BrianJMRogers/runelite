@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 
 public class RuneLiteProperties
 {
-	private static final String RUNELITE_TITLE = "runelite.title";
+	private static final String RUNELITE_TITLE = "eowlite.title";
 	private static final String RUNELITE_VERSION = "runelite.version";
 	private static final String RUNESCAPE_VERSION = "runescape.version";
 	private static final String DISCORD_APP_ID = "runelite.discord.appid";
@@ -60,7 +60,7 @@ public class RuneLiteProperties
 
 	public static String getTitle()
 	{
-		return properties.getProperty(RUNELITE_TITLE);
+		return "EOwLite";
 	}
 
 	public static String getVersion()
