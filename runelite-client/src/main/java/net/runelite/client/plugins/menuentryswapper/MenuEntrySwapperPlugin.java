@@ -501,14 +501,20 @@ public class MenuEntrySwapperPlugin extends Plugin
 				swap("enchant", option, target, true);
 			}
 
-			if (config.swapBrimhaven())
+			if (config.swapCaptainBarnaby() != CaptainBarnabyMode.OFF)
 			{
-				swap("brimhaven", option, target, true);
-			}
-
-			if (config.swapRimmington())
-			{
-				swap("rimmington", option, target, true);
+				switch (config.swapCaptainBarnaby())
+				{
+					case ARDOUGNE:
+						swap("ardougne", option, target, true);
+						break;
+					case BRIMHAVEN:
+						swap("brimhaven", option, target, true);
+						break;
+					case RIMMINGTON:
+						swap("rimmington", option, target, true);
+						break;
+				}
 			}
 		}
 		else if (config.swapTravel() && option.equals("pass") && target.equals("energy barrier"))
