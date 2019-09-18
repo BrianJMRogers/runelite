@@ -27,13 +27,21 @@ package net.runelite.client.plugins.chatcommands;
 import java.awt.event.KeyEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import com.google.inject.Provides;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.ScriptID;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.VarClientStr;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.input.KeyListener;
 
+import static net.runelite.api.ScriptID.CHATBOX_INPUT;
+
 @Singleton
+@Slf4j
 public class ChatKeyboardListener implements KeyListener
 {
 	@Inject
@@ -45,6 +53,15 @@ public class ChatKeyboardListener implements KeyListener
 	@Inject
 	private ClientThread clientThread;
 
+	@Inject
+	private ChatCommandsConfig config;
+
+	@Provides
+	ChatCommandsConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(ChatCommandsConfig.class);
+	}
+
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
@@ -54,7 +71,33 @@ public class ChatKeyboardListener implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if (!e.isControlDown() || !chatCommandsConfig.clearShortcuts())
+		if (!config.shortcuts().equals("") && e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			String inputt = client.getVar(VarClientStr.CHATBOX_TYPED_TEXT);
+			if (!config.shortcuts().equals(""))
+			{
+				String[] pairs = config.shortcuts().split(",");
+				String[] shortcut;
+				for (String pair : pairs)
+				{
+					shortcut = pair.split("=");
+					if (shortcut.length != 2)
+						continue;
+
+					if (shortcut[0].equals(inputt)) {
+						final String phrase = shortcut[1];
+						client.setVar(VarClientStr.CHATBOX_TYPED_TEXT, phrase);
+
+						clientThread.invoke(() ->
+								client.runScript(CHATBOX_INPUT, 0, phrase));
+
+						client.setVar(VarClientStr.CHATBOX_TYPED_TEXT, "");
+					}
+				}
+			}
+		}
+
+		if ((!e.isControlDown() || !chatCommandsConfig.clearShortcuts()))
 		{
 			return;
 		}
@@ -76,7 +119,7 @@ public class ChatKeyboardListener implements KeyListener
 					final String replacement;
 					if (idx != -1)
 					{
-						replacement = input.substring(0, idx);
+						replacement = input.substring(0, idx+1);
 					}
 					else
 					{

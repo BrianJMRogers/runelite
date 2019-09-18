@@ -32,6 +32,17 @@ import net.runelite.client.config.ConfigItem;
 public interface ChatCommandsConfig extends Config
 {
 	@ConfigItem(
+			keyName = "shortcuts",
+			name = "Shortcuts",
+			description = "List of shortcuts. These should be comma separated. Example:\"<shortcut>=<phrase>,<shortcut2>=<phrase2>\"",
+			position = -1
+	)
+	default String shortcuts()
+	{
+		return "!=Eowlite,!!=rocks";
+	}
+
+	@ConfigItem(
 		position = 0,
 		keyName = "price",
 		name = "Price Command",
