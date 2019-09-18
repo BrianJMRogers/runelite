@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Lotto <https://github.com/devLotto>
+ * Copyright (c) 2019, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,16 +22,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.cluescrolls.clues.emote;
+package net.runelite.http.service.config;
 
-import net.runelite.api.Client;
-import net.runelite.api.Item;
+import com.google.common.collect.ImmutableMap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
-public interface ItemRequirement
+public class ConfigServiceTest
 {
-	boolean fulfilledBy(int itemId);
+	@Test
+	public void testParseJsonString()
+	{
+		assertEquals(1, ConfigService.parseJsonString("1"));
+		assertEquals(3.14, ConfigService.parseJsonString("3.14"));
+		assertEquals(1L << 32, ConfigService.parseJsonString("4294967296"));
+		assertEquals("test", ConfigService.parseJsonString("test"));
+		assertEquals("test", ConfigService.parseJsonString("\"test\""));
+		assertEquals(ImmutableMap.of("key", "value"), ConfigService.parseJsonString("{\"key\": \"value\"}"));
+	}
 
-	boolean fulfilledBy(Item[] items);
-
-	String getCollectiveName(Client client);
+	@Test
+	public void testValidateJson()
+	{
+		assertTrue(ConfigService.validateJson("1"));
+		assertTrue(ConfigService.validateJson("3.14"));
+		assertTrue(ConfigService.validateJson("test"));
+		assertTrue(ConfigService.validateJson("\"test\""));
+		assertTrue(ConfigService.validateJson("key:value"));
+		assertTrue(ConfigService.validateJson("{\"key\": \"value\"}"));
+	}
 }

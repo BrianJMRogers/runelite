@@ -54,10 +54,21 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "logoutidle",
-			name = "Idle Logout Notifications",
-			description = "Configures if the idle logout notifications are enabled",
-			position = 3
+		keyName = "movementidle",
+		name = "Idle Movement Notifications",
+		description = "Configures if idle movement notifications are enabled e.g. running, walking",
+		position = 3
+	)
+	default boolean movementIdle()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "logoutidle",
+		name = "Idle Logout Notifications",
+		description = "Configures if the idle logout notifications are enabled",
+		position = 4
 	)
 	default boolean logoutIdle()
 	{
@@ -65,10 +76,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "timeout",
-			name = "Idle Notification Delay (ms)",
-			description = "The notification delay after the player is idle",
-			position = 4
+		keyName = "timeout",
+		name = "Idle Notification Delay (ms)",
+		description = "The notification delay after the player is idle",
+		position = 5
 	)
 	default int getIdleNotificationDelay()
 	{
@@ -76,20 +87,20 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "oxygen",
-			name = "Oxygen Notification Threshold",
-			position = 5,
-			description = "The amount of remaining oxygen to send a notification at. A value of 0 will disable notification."
+		keyName = "oxygen",
+		name = "Oxygen Notification Threshold",
+		position = 5,
+		description = "The amount of remaining oxygen to send a notification at. A value of 0 will disable notification."
 	)
 	default int getOxygenThreshold()
 	{
 		return 0;
 	}
 	@ConfigItem(
-			keyName = "spec",
-			name = "Special Attack Energy Notification Threshold",
-			position = 6,
-			description = "The amount of spec energy reached to send a notification at. A value of 0 will disable notification."
+		keyName = "spec",
+		name = "Special Attack Energy Notification Threshold",
+		position = 6,
+		description = "The amount of spec energy reached to send a notification at. A value of 0 will disable notification."
 	)
 	default int getSpecEnergyThreshold()
 	{
@@ -97,10 +108,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "hitpoints",
-			name = "Hitpoints Notification Threshold",
-			description = "The amount of hitpoints to send a notification at. A value of 0 will disable notification.",
-			position = 7
+		keyName = "hitpoints",
+		name = "Hitpoints Notification Threshold",
+		description = "The amount of hitpoints to send a notification at. A value of 0 will disable notification.",
+		position = 6
 	)
 	default int getHitpointsThreshold()
 	{
@@ -108,10 +119,10 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "prayer",
-			name = "Prayer Notification Threshold",
-			description = "The amount of prayer points to send a notification at. A value of 0 will disable notification.",
-			position = 8
+		keyName = "prayer",
+		name = "Prayer Notification Threshold",
+		description = "The amount of prayer points to send a notification at. A value of 0 will disable notification.",
+		position = 7
 	)
 	default int getPrayerThreshold()
 	{
@@ -119,21 +130,22 @@ public interface IdleNotifierConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "ranged",
-			name = "Ranged Notification Threshold",
-			description = "The ranged level to send a notification at. A value of 0 will disable notification.",
-			position = 9
+		keyName = "ranged",
+		name = "Ranged Notification Threshold",
+		description = "The ranged level to send a notification at. A value of 0 will disable notification.",
+		position = 9
 	)
+
 	default int getRangedThreshold()
 	{
 		return 0;
 	}
 
 	@ConfigItem(
-			keyName = "attack",
-			name = "Attack Notification Threshold",
-			description = "The attack level to send a notification at. A value of 0 will disable notification.",
-			position = 10
+		keyName = "attack",
+		name = "Attack Notification Threshold",
+		description = "The attack level to send a notification at. A value of 0 will disable notification.",
+		position = 10
 	)
 	default int getAttackThreshold()
 	{

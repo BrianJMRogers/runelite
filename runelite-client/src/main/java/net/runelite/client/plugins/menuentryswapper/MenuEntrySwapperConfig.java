@@ -104,6 +104,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "swapCaptainBarnaby",
+		name = "Captain Barnaby",
+		description = "Swap Talk-to with Brimhaven, Rimmington, or Ardougne"
+	)
+	default CaptainBarnabyMode swapCaptainBarnaby()
+	{
+		return CaptainBarnabyMode.OFF;
+	}
+
+	@ConfigItem(
 		keyName = "swapContract",
 		name = "Contract",
 		description = "Swap Talk-to with Contract on Guildmaster Jane"
@@ -205,8 +215,8 @@ public interface MenuEntrySwapperConfig extends Config
 
 	@ConfigItem(
 		keyName = "swapPickpocket",
-		name = "Pickpocket on H.A.M.",
-		description = "Swap Talk-to with Pickpocket on H.A.M members"
+		name = "Pickpocket",
+		description = "Swap Talk-to with Pickpocket"
 	)
 	default boolean swapPickpocket()
 	{
@@ -262,7 +272,7 @@ public interface MenuEntrySwapperConfig extends Config
 	{
 		return true;
 	}
-
+	
 	@ConfigItem(
 		keyName = "swapTeleportItem",
 		name = "Teleport item",

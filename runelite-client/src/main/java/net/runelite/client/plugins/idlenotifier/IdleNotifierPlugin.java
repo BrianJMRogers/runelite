@@ -45,6 +45,7 @@ import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.VarPlayer;
 import net.runelite.api.Varbits;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -88,6 +89,9 @@ public class IdleNotifierPlugin extends Plugin
 	private int lastAnimation = AnimationID.IDLE;
 	private Instant lastInteracting;
 	private Actor lastInteract;
+	private Instant lastMoving;
+	private WorldPoint lastPosition;
+	private boolean notifyPosition = false;
 	private boolean notifyHitpoints = true;
 	private boolean notifyPrayer = true;
 	private boolean notifyRanged = true;
@@ -138,7 +142,8 @@ public class IdleNotifierPlugin extends Plugin
 			case WOODCUTTING_DRAGON:
 			case WOODCUTTING_INFERNAL:
 			case WOODCUTTING_3A_AXE:
-				/* Cooking(Fire, Range) */
+			case WOODCUTTING_CRYSTAL:
+			/* Cooking(Fire, Range) */
 			case COOKING_FIRE:
 			case COOKING_RANGE:
 			case COOKING_WINE:
@@ -157,7 +162,7 @@ public class IdleNotifierPlugin extends Plugin
 			case CRAFTING_LEATHER:
 			case CRAFTING_POTTERS_WHEEL:
 			case CRAFTING_POTTERY_OVEN:
-			/* Fletching(Cutting, Stringing) */
+			/* Fletching(Cutting, Stringing, Adding feathers and heads) */
 			case FLETCHING_BOW_CUTTING:
 			case FLETCHING_STRING_NORMAL_SHORTBOW:
 			case FLETCHING_STRING_OAK_SHORTBOW:
@@ -171,7 +176,9 @@ public class IdleNotifierPlugin extends Plugin
 			case FLETCHING_STRING_MAPLE_LONGBOW:
 			case FLETCHING_STRING_YEW_LONGBOW:
 			case FLETCHING_STRING_MAGIC_LONGBOW:
-				/* Smithing(Anvil, Furnace, Cannonballs */
+			case FLETCHING_ATTACH_FEATHERS_TO_ARROWSHAFT:
+			case FLETCHING_ATTACH_HEADS:
+			/* Smithing(Anvil, Furnace, Cannonballs */
 			case SMITHING_ANVIL:
 			case SMITHING_SMELTING:
 			case SMITHING_CANNONBALL:
@@ -187,9 +194,11 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_ADAMANT_PICKAXE:
 			case MINING_RUNE_PICKAXE:
 			case MINING_DRAGON_PICKAXE:
-			case MINING_DRAGON_PICKAXE_ORN:
+			case MINING_DRAGON_PICKAXE_UPGRADED:
+			case MINING_DRAGON_PICKAXE_OR:
 			case MINING_INFERNAL_PICKAXE:
 			case MINING_3A_PICKAXE:
+			case MINING_CRYSTAL_PICKAXE:
 			case DENSE_ESSENCE_CHIPPING:
 			case DENSE_ESSENCE_CHISELING:
 				/* Mining(Motherlode) */
@@ -201,10 +210,12 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_MOTHERLODE_ADAMANT:
 			case MINING_MOTHERLODE_RUNE:
 			case MINING_MOTHERLODE_DRAGON:
-			case MINING_MOTHERLODE_DRAGON_ORN:
+			case MINING_MOTHERLODE_DRAGON_UPGRADED:
+			case MINING_MOTHERLODE_DRAGON_OR:
 			case MINING_MOTHERLODE_INFERNAL:
 			case MINING_MOTHERLODE_3A:
-				/* Herblore */
+			case MINING_MOTHERLODE_CRYSTAL:
+			/* Herblore */
 			case HERBLORE_PESTLE_AND_MORTAR:
 			case HERBLORE_POTIONMAKING:
 			case HERBLORE_MAKE_TAR:
@@ -396,6 +407,11 @@ public class IdleNotifierPlugin extends Plugin
 		if (config.animationIdle() && checkAnimationIdle(waitDuration, local))
 		{
 			notifier.notify("[" + local.getName() + "] is now idle!");
+		}
+
+		if (config.movementIdle() && checkMovementIdle(waitDuration, local))
+		{
+			notifier.notify("[" + local.getName() + "] has stopped moving!");
 		}
 
 		if (config.interactionIdle() && checkInteractionIdle(waitDuration, local))
@@ -747,6 +763,37 @@ public class IdleNotifierPlugin extends Plugin
 		else
 		{
 			lastAnimating = Instant.now();
+		}
+
+		return false;
+	}
+
+	private boolean checkMovementIdle(Duration waitDuration, Player local)
+	{
+		if (lastPosition == null)
+		{
+			lastPosition = local.getWorldLocation();
+			return false;
+		}
+
+		WorldPoint position = local.getWorldLocation();
+
+		if (lastPosition.equals(position))
+		{
+			if (notifyPosition
+				&& local.getAnimation() == IDLE
+				&& Instant.now().compareTo(lastMoving.plus(waitDuration)) >= 0)
+			{
+				notifyPosition = false;
+				// Return true only if we weren't just breaking out of an animation
+				return lastAnimation == IDLE;
+			}
+		}
+		else
+		{
+			notifyPosition = true;
+			lastPosition = position;
+			lastMoving = Instant.now();
 		}
 
 		return false;

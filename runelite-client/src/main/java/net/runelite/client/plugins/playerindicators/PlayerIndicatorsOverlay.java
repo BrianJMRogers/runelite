@@ -94,8 +94,8 @@ public class PlayerIndicatorsOverlay extends Overlay
 
 		String name = "";
 		if (config.warnUnchargedDragonstone() &&
-				actor == client.getLocalPlayer() &&
-				PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
+			actor == client.getLocalPlayer() &&
+			PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
 		{
 			name = "YOUR DRAGONSTONE ITEM HAS NO CHARGES";
 		}

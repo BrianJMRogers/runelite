@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Adam <Adam@sigterm.info>
+ * Copyright (c) 2018, Lotto <https://github.com/devLotto>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,15 +22,51 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.api.events;
+package net.runelite.client.plugins.cluescrolls.clues.item;
 
-import lombok.Value;
+import net.runelite.api.Client;
+import net.runelite.api.Item;
+import net.runelite.api.ItemComposition;
 
-/**
- * An event where the position of a {@link net.runelite.api.widgets.Widget}
- * relative to its parent has changed.
- */
-@Value
-public class WidgetPositioned
+public class SingleItemRequirement implements ItemRequirement
 {
+	private int itemId;
+
+	public SingleItemRequirement(int itemId)
+	{
+		this.itemId = itemId;
+	}
+
+	@Override
+	public boolean fulfilledBy(int itemId)
+	{
+		return this.itemId == itemId;
+	}
+
+	@Override
+	public boolean fulfilledBy(Item[] items)
+	{
+		for (Item item : items)
+		{
+			if (item.getId() == itemId)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public String getCollectiveName(Client client)
+	{
+		ItemComposition definition = client.getItemDefinition(itemId);
+
+		if (definition == null)
+		{
+			return "N/A";
+		}
+
+		return definition.getName();
+	}
 }

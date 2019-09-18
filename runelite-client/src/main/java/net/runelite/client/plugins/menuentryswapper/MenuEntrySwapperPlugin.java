@@ -25,8 +25,10 @@
  */
 package net.runelite.client.plugins.menuentryswapper;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.Stack;
@@ -133,6 +135,8 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	@Setter
 	private boolean shiftModifier = false;
+
+	private final ArrayListMultimap<String, Integer> optionIndexes = ArrayListMultimap.create();
 
 	@Provides
 	MenuEntrySwapperConfig provideConfig(ConfigManager configManager)
@@ -266,12 +270,12 @@ public class MenuEntrySwapperPlugin extends Plugin
 		ItemComposition itemComposition = client.getItemDefinition(itemId);
 		String itemName = itemComposition.getName();
 		String option = "Use";
-		int shiftClickActionindex = itemComposition.getShiftClickActionIndex();
+		int shiftClickActionIndex = itemComposition.getShiftClickActionIndex();
 		String[] inventoryActions = itemComposition.getInventoryActions();
 
-		if (shiftClickActionindex >= 0 && shiftClickActionindex < inventoryActions.length)
+		if (shiftClickActionIndex >= 0 && shiftClickActionIndex < inventoryActions.length)
 		{
-			option = inventoryActions[shiftClickActionindex];
+			option = inventoryActions[shiftClickActionIndex];
 		}
 
 		MenuEntry[] entries = event.getMenuEntries();
@@ -358,6 +362,16 @@ public class MenuEntrySwapperPlugin extends Plugin
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
+		final String option = Text.removeTags(event.getOption()).toLowerCase();
+
+		if (event.getType() == MenuAction.CANCEL.getId())
+		{
+			optionIndexes.clear();
+		}
+
+		int size = optionIndexes.size();
+		optionIndexes.put(option, size);
+
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
@@ -388,7 +402,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 
 		final int eventId = event.getIdentifier();
-		final String option = Text.removeTags(event.getOption()).toLowerCase();
 		final String target = Text.removeTags(event.getTarget()).toLowerCase();
 		final NPC hintArrowNpc = client.getHintArrowNpc();
 
@@ -401,7 +414,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 		if (option.equals("talk-to"))
 		{
-			if (config.swapPickpocket() && target.contains("h.a.m."))
+			if (config.swapPickpocket() && shouldSwapPickpocket(target))
 			{
 				swap("pickpocket", option, target, true);
 			}
@@ -486,6 +499,22 @@ public class MenuEntrySwapperPlugin extends Plugin
 			if (config.swapEnchant())
 			{
 				swap("enchant", option, target, true);
+			}
+
+			if (config.swapCaptainBarnaby() != CaptainBarnabyMode.OFF)
+			{
+				switch (config.swapCaptainBarnaby())
+				{
+					case ARDOUGNE:
+						swap("ardougne", option, target, true);
+						break;
+					case BRIMHAVEN:
+						swap("brimhaven", option, target, true);
+						break;
+					case RIMMINGTON:
+						swap("rimmington", option, target, true);
+						break;
+				}
 			}
 		}
 		else if (config.swapTravel() && option.equals("pass") && target.equals("energy barrier"))
@@ -579,6 +608,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		else if (config.swapQuick() && option.equals("climb-down"))
 		{
 			swap("quick-start", option, target, true);
+			swap("pay", option, target, true);
 		}
 		else if (config.swapAdmire() && option.equals("admire"))
 		{
@@ -623,6 +653,11 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	}
 
+	private static boolean shouldSwapPickpocket(String target)
+	{
+		return !target.startsWith("villager") && !target.startsWith("bandit") && !target.startsWith("menaphite thug");
+	}
+
 	@Subscribe
 	public void onPostItemComposition(PostItemComposition event)
 	{
@@ -651,7 +686,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String target = "";
 		for (int i = 0; i < t.length()-1; i++)
 		{
-			if (Character.isLetter(t.charAt(i)) || Character.isDigit(t.charAt(i)))
+			if (Character.isLetter(t.charAt(i)) ||
+				Character.isDigit(t.charAt(i)) ||
+				t.charAt(i) == '-' ||
+				t.charAt(i) == '_')
 			{
 				target += t.charAt(i);
 			} else
@@ -671,21 +709,33 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	private int searchIndex(MenuEntry[] entries, String option, String target, boolean strict)
 	{
-		for (int i = entries.length - 1; i >= 0; i--)
+		if (strict)
 		{
-			MenuEntry entry = entries[i];
-			String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
-			String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+			List<Integer> indexes = optionIndexes.get(option);
 
-			if (strict)
+			// We want the last index which matches the target, as that is what is top-most
+			// on the menu
+			for (int i = indexes.size() - 1; i >= 0; --i)
 			{
-				if (entryOption.equals(option) && entryTarget.equals(target))
+				int idx = indexes.get(i);
+				MenuEntry entry = entries[idx];
+				String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+
+				if (entryTarget.equals(target))
 				{
-					return i;
+					return idx;
 				}
 			}
-			else
+		}
+		else
+		{
+			// Without strict matching we have to iterate all entries...
+			for (int i = entries.length - 1; i >= 0; i--)
 			{
+				MenuEntry entry = entries[i];
+				String entryOption = Text.removeTags(entry.getOption()).toLowerCase();
+				String entryTarget = Text.removeTags(entry.getTarget()).toLowerCase();
+
 				if (entryOption.contains(option.toLowerCase()) && entryTarget.equals(target))
 				{
 					return i;

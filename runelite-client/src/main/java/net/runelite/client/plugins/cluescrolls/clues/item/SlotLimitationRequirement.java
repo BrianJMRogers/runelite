@@ -22,47 +22,51 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.cluescrolls.clues.emote;
+package net.runelite.client.plugins.cluescrolls.clues.item;
 
 import net.runelite.api.Client;
+import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 
-public class RangeItemRequirement implements ItemRequirement
+public class SlotLimitationRequirement implements ItemRequirement
 {
-	private String name;
-	private int startItemId;
-	private int endItemId;
+	private String description;
+	private EquipmentInventorySlot[] slots;
 
-	public RangeItemRequirement(String name, int startItemId, int endItemId)
+	public SlotLimitationRequirement(String description, EquipmentInventorySlot... slots)
 	{
-		this.name = name;
-		this.startItemId = startItemId;
-		this.endItemId = endItemId;
+		this.description = description;
+		this.slots = slots;
 	}
 
 	@Override
 	public boolean fulfilledBy(int itemId)
 	{
-		return itemId >= startItemId && itemId <= endItemId;
+		return false;
 	}
 
 	@Override
 	public boolean fulfilledBy(Item[] items)
 	{
-		for (Item item : items)
+		for (EquipmentInventorySlot slot : slots)
 		{
-			if (item.getId() >= startItemId && item.getId() <= endItemId)
+			if (slot.getSlotIdx() >= items.length)
 			{
-				return true;
+				continue; //We can't check the slot, because there is nothing in it, the array hasn't been resized
+			}
+
+			if (items[slot.getSlotIdx()].getId() != -1)
+			{
+				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override
 	public String getCollectiveName(Client client)
 	{
-		return name;
+		return description;
 	}
 }
