@@ -686,7 +686,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String target = "";
 		for (int i = 0; i < t.length()-1; i++)
 		{
-			if (Character.isLetter(t.charAt(i)) || Character.isDigit(t.charAt(i)))
+			if (Character.isLetter(t.charAt(i)) ||
+				Character.isDigit(t.charAt(i)) ||
+				t.charAt(i) == '-' ||
+				t.charAt(i) == '_')
 			{
 				target += t.charAt(i);
 			} else
