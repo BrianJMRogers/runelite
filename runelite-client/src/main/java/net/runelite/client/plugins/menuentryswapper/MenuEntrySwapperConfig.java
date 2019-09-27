@@ -214,6 +214,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "swapHouseAdvertisement",
+		name = "House Advertisement",
+		description = "Swap View with Add-House or Visit-Last on House Advertisement board"
+	)
+	default HouseAdvertisementMode swapHouseAdvertisement()
+	{
+		return HouseAdvertisementMode.VIEW;
+	}
+
+	@ConfigItem(
 		keyName = "swapPickpocket",
 		name = "Pickpocket",
 		description = "Swap Talk-to with Pickpocket"
