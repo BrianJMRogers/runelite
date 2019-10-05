@@ -100,10 +100,6 @@ public class PlayerIndicatorsService
 			{
 				consumer.accept(player, config.getTeamMemberColor());
 			}
-			else if (config.highlightNonClanMembers() && !isClanMember)
-			{
-				consumer.accept(player, config.getNonClanMemberColor());
-			}
 			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != 0)
 			{
 				// determine if in a clump
@@ -113,6 +109,10 @@ public class PlayerIndicatorsService
 				} else {
 					consumer.accept(player, config.getHittablePlayerColor());
 				}
+			}
+			else if (config.highlightNonClanMembers() && !isClanMember)
+			{
+				consumer.accept(player, config.getNonClanMemberColor());
 			}
 		}
 	}

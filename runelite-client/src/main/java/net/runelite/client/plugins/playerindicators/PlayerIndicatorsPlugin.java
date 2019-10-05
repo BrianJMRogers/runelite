@@ -164,10 +164,6 @@ public class PlayerIndicatorsPlugin extends Plugin
 			{
 				color = config.getTeamMemberColor();
 			}
-			else if (config.highlightNonClanMembers() && !player.isClanMember())
-			{
-				color = config.getClanMemberColor();
-			}
 			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != -1)
 			{
 				// determine if in a clump
@@ -177,6 +173,10 @@ public class PlayerIndicatorsPlugin extends Plugin
 				} else {
 					color = config.getHittablePlayerColor();
 				}
+			}
+			else if (config.highlightNonClanMembers() && !player.isClanMember())
+			{
+				color = config.getClanMemberColor();
 			}
 
 			if (image != -1 || color != null)

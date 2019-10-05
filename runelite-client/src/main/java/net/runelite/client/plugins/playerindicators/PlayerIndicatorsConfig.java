@@ -144,29 +144,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 10,
-		keyName = "drawNonClanMemberNames",
-		name = "Highlight non-clan members",
-		description = "Configures whether or not non-clan members should be highlighted"
-	)
-	default boolean highlightNonClanMembers()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-			position = 11,
-		keyName = "nonClanMemberColor",
-		name = "Non-clan member color",
-		description = "Color of non-clan member names"
-	)
-	default Color getNonClanMemberColor()
-	{
-		return Color.RED;
-	}
-
-	@ConfigItem(
-			position = 12,
+			position = 10,
 			keyName = "highlightHittablePlayers",
 			name = "Highlight hittable players",
 			description = "Highlight hittable players in the wilderness"
@@ -177,7 +155,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 13,
+			position = 11,
 			keyName = "getHittablePlayerColor",
 			name = "Hittable player color",
 			description = "Color of the hittable player"
@@ -188,7 +166,7 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 14,
+			position = 12,
 			keyName = "highlightPlayerClumps",
 			name = "Highlight player clumps",
 			description = "Draw tiles around players in potential clumps. Highlight hittable players must be enabled"
@@ -199,12 +177,34 @@ public interface PlayerIndicatorsConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 15,
+			position = 13,
 			keyName = "clumpablePlayerColors",
 			name = "clumpable players color",
 			description = "Color of the clumpable players"
 	)
 	default Color getClumpablePlayerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		position = 14,
+		keyName = "drawNonClanMemberNames",
+		name = "Highlight non-clan members",
+		description = "Configures whether or not non-clan members should be highlighted"
+	)
+	default boolean highlightNonClanMembers()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 15,
+		keyName = "nonClanMemberColor",
+		name = "Non-clan member color",
+		description = "Color of non-clan member names"
+	)
+	default Color getNonClanMemberColor()
 	{
 		return Color.RED;
 	}
