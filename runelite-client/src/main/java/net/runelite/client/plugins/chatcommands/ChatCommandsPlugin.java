@@ -60,7 +60,7 @@ import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 import static net.runelite.client.util.Text.sanitize;
 import net.runelite.http.api.chat.ChatClient;
 import net.runelite.http.api.chat.Duels;
@@ -834,7 +834,7 @@ public class ChatCommandsPlugin extends Plugin
 				.append(ChatColorType.NORMAL)
 				.append(": GE average ")
 				.append(ChatColorType.HIGHLIGHT)
-				.append(StackFormatter.formatNumber(itemPrice));
+				.append(QuantityFormatter.formatNumber(itemPrice));
 
 			ItemComposition itemComposition = itemManager.getItemComposition(itemId);
 			if (itemComposition != null)
@@ -844,7 +844,7 @@ public class ChatCommandsPlugin extends Plugin
 					.append(ChatColorType.NORMAL)
 					.append(" HA value ")
 					.append(ChatColorType.HIGHLIGHT)
-					.append(StackFormatter.formatNumber(alchPrice));
+					.append(QuantityFormatter.formatNumber(alchPrice));
 			}
 
 			String response = builder.build();
