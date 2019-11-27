@@ -73,7 +73,7 @@ public class ChatKeyboardListener implements KeyListener
 	{
 		if (!config.shortcuts().equals("") && e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
-			String inputt = client.getVar(VarClientStr.CHATBOX_TYPED_TEXT);
+			String input = client.getVar(VarClientStr.CHATBOX_TYPED_TEXT);
 			if (!config.shortcuts().equals(""))
 			{
 				String[] pairs = config.shortcuts().split(",");
@@ -84,12 +84,18 @@ public class ChatKeyboardListener implements KeyListener
 					if (shortcut.length != 2)
 						continue;
 
-					if (shortcut[0].equals(inputt)) {
+					if (shortcut[0].equals(input) || (input.length() > 1 && input.charAt(0) == '/' && shortcut[0].equals(input.substring(1)))) {
 						final String phrase = shortcut[1];
 						client.setVar(VarClientStr.CHATBOX_TYPED_TEXT, phrase);
 
-						clientThread.invoke(() ->
-								client.runScript(CHATBOX_INPUT, 0, phrase));
+						if (input.charAt(0) == '/')
+						{
+							clientThread.invoke(() ->
+									client.runScript(133377, "/" + phrase));
+						} else {
+							clientThread.invoke(() ->
+									client.runScript(CHATBOX_INPUT, 0, phrase));
+						}
 
 						client.setVar(VarClientStr.CHATBOX_TYPED_TEXT, "");
 					}
