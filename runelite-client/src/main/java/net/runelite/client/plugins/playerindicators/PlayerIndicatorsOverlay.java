@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.Client;
 import net.runelite.client.game.ClanManager;
@@ -93,7 +94,13 @@ public class PlayerIndicatorsOverlay extends Overlay
 		}
 
 		String name = "";
-		if (config.warnUnchargedDragonstone() &&
+		if (config.warnNoProtectItem() &&
+			actor == client.getLocalPlayer() &&
+			!client.isPrayerActive(Prayer.PROTECT_ITEM))
+		{
+			name = "YOU ARE NOT PROTECTING ITEM";
+		}
+		else if (config.warnUnchargedDragonstone() &&
 			actor == client.getLocalPlayer() &&
 			PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
 		{

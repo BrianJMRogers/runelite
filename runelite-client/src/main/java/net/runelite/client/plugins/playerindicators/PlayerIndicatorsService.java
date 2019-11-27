@@ -29,12 +29,7 @@ import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import net.runelite.api.Client;
-import net.runelite.api.Item;
-import net.runelite.api.InventoryID;
-import net.runelite.api.ItemComposition;
-import net.runelite.api.Player;
-import net.runelite.client.game.ItemManager;
+import net.runelite.api.*;
 import net.runelite.client.util.WildernessUtils;
 
 @Singleton
@@ -73,7 +68,11 @@ public class PlayerIndicatorsService
 
 			if (player == localPlayer)
 			{
-				if (config.warnUnchargedDragonstone() && PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
+				if (config.warnNoProtectItem() && !client.isPrayerActive(Prayer.PROTECT_ITEM))
+				{
+					consumer.accept(player, config.getWarnNoProtectItemColor());
+				}
+				else if (config.warnUnchargedDragonstone() && PlayerIndicatorUtils.playerIsWearingUnchargedDragonstone(client))
 				{
 					consumer.accept(player, config.getUnchargedDragonstoneColor());
 				}

@@ -30,14 +30,14 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
+
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
-@Slf4j
+
 public class PlayerIndicatorsTileOverlay extends Overlay
 {
 	private final PlayerIndicatorsService playerIndicatorsService;
