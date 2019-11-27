@@ -164,7 +164,7 @@ public class PlayerIndicatorsPlugin extends Plugin
 			{
 				color = config.getTeamMemberColor();
 			}
-			else if (config.highlightHittablePlayers() && WildernessUtils.isHittable(player, client) != -1)
+			else if (config.highlightHittablePlayers() && WildernessUtils.isAttackable(client, player))
 			{
 				// determine if in a clump
 				if (config.highlightPlayerClumps() && WildernessUtils.isInClump(player, client) > 0)

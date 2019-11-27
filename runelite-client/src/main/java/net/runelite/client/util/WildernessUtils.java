@@ -5,6 +5,8 @@ import net.runelite.api.Player;
 import net.runelite.api.WorldType;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.Varbits;
+import net.runelite.api.coords.WorldPoint;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,11 +63,53 @@ public class WildernessUtils {
       return false;
     }
 
+    /**
+     * Gets the wilderness level based on a world point
+     *
+     * @param point the point in the world to get the wilderness level for
+     * @return the int representing the wilderness level
+     */
+    public static int getWildernessLevelFrom(WorldPoint point)
+    {
+        int y = point.getY();
+
+        int underLevel = ((y - 9920) / 8) + 1;
+        int upperLevel = ((y - 3520) / 8) + 1;
+
+        return y > 6400 ? underLevel : upperLevel;
+    }
+
+    /**
+     * Determines if another player is attackable based off of wilderness level and combat levels
+     *
+     * @param client The client of the local player
+     * @param player the player to determine attackability
+     * @return returns true if the player is attackable, false otherwise
+     */
+    public static boolean isAttackable(Client client, Player player)
+    {
+        int wildernessLevel = 0;
+        if (!(client.getVar(Varbits.IN_WILDERNESS) == 1 || WorldType.isPvpWorld(client.getWorldType())))
+        {
+            return false;
+        }
+        if (WorldType.isPvpWorld(client.getWorldType()))
+        {
+            if (client.getVar(Varbits.IN_WILDERNESS) != 1)
+            {
+                return Math.abs(client.getLocalPlayer().getCombatLevel() - player.getCombatLevel()) <= 15;
+            }
+            wildernessLevel = 15;
+        }
+        return Math.abs(client.getLocalPlayer().getCombatLevel() - player.getCombatLevel())
+                < (getWildernessLevelFrom(client.getLocalPlayer().getWorldLocation()) + wildernessLevel);
+    }
+
     public static int isHittable(Player opponent, Client client)
     {
         // if we aren't in the wild, we can't hit them
         int ourWildernessLevel = getWildernessLevel(client);
-        if (ourWildernessLevel == 0)
+        if (ourWildernessLevel == 0 && !client.getWorldType().contains(WorldType.PVP))
         {
             return 0;
         }
@@ -91,8 +135,16 @@ public class WildernessUtils {
         if (ourCbLevel >= opponentMinHittableLevel && ourCbLevel <= opponentMaxHittableLevel &&
             opponentCb >= ourMinHittableLevel && opponentCb <= ourMaxHittableLevel)
         {
-            if (ourCbLevel == opponentCb) return 1;
-            return Math.abs(ourCbLevel - opponentCb); // the level above which we can fight
+            if (ourCbLevel == opponentCb)
+            {
+                if (client.getWorldType().contains(WorldType.PVP)) return 1 + 15;
+                else return 1;
+            }
+            else {
+                int levelAboveWhichWeCanFight = Math.abs(ourCbLevel - opponentCb);
+                if (client.getWorldType().contains(WorldType.PVP)) return levelAboveWhichWeCanFight + 15;
+                else return levelAboveWhichWeCanFight;
+            }
         }
         return hittableDistance;
     }
