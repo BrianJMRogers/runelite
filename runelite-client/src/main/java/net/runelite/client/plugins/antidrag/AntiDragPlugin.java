@@ -38,7 +38,9 @@ import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
 	name = "Shift Anti Drag",
-	description = "Prevent dragging an item for a specified delay",
+	description = "Prevent dragging an item for a specified delay. " +
+			"Inverted from reguler RuneLite. Hold shift to drag your inventory, " +
+			"hold nothing to use the anti-drag. Click shift to initiate",
 	tags = {"antidrag", "delay", "inventory", "items"}
 )
 public class AntiDragPlugin extends Plugin implements KeyListener
@@ -84,7 +86,9 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	{
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
 		{
-			client.setInventoryDragDelay(config.dragDelay());
+			if (config.invert()) client.setInventoryDragDelay(DEFAULT_DELAY);
+			else client.setInventoryDragDelay(config.dragDelay());
+
 		}
 	}
 
@@ -93,7 +97,8 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	{
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
 		{
-			client.setInventoryDragDelay(DEFAULT_DELAY);
+			if (config.invert()) client.setInventoryDragDelay(config.dragDelay());
+			else client.setInventoryDragDelay(DEFAULT_DELAY);
 		}
 	}
 

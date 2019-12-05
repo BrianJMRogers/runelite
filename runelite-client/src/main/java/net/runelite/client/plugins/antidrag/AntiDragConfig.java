@@ -42,4 +42,15 @@ public interface AntiDragConfig extends Config
 	{
 		return Constants.GAME_TICK_LENGTH / Constants.CLIENT_TICK_LENGTH; // one game tick
 	}
+
+	@ConfigItem(
+			keyName = "invert",
+			name = "Invert",
+			description = "Inverts whether shift allows or stops dragging",
+			position = 2
+	)
+	default boolean invert()
+	{
+		return false; // default off
+	}
 }
