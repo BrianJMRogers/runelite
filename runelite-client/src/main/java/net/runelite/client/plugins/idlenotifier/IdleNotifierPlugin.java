@@ -185,7 +185,19 @@ public class IdleNotifierPlugin extends Plugin
 				/* Fishing */
 			case FISHING_CRUSHING_INFERNAL_EELS:
 			case FISHING_CUTTING_SACRED_EELS:
-				/* Mining(Normal) */
+			case FISHING_BIG_NET:
+			case FISHING_NET:
+			case FISHING_POLE_CAST:
+			case FISHING_CAGE:
+			case FISHING_HARPOON:
+			case FISHING_BARBTAIL_HARPOON:
+			case FISHING_DRAGON_HARPOON:
+			case FISHING_INFERNAL_HARPOON:
+			case FISHING_CRYSTAL_HARPOON:
+			case FISHING_OILY_ROD:
+			case FISHING_KARAMBWAN:
+			case FISHING_BAREHAND:
+			/* Mining(Normal) */
 			case MINING_BRONZE_PICKAXE:
 			case MINING_IRON_PICKAXE:
 			case MINING_STEEL_PICKAXE:
@@ -670,6 +682,11 @@ public class IdleNotifierPlugin extends Plugin
 			{
 				lastInteract = null;
 				lastInteracting = null;
+
+				// prevent animation notifications from firing too
+				lastAnimation = IDLE;
+				lastAnimating = null;
+
 				return true;
 			}
 		}
@@ -757,6 +774,11 @@ public class IdleNotifierPlugin extends Plugin
 			{
 				lastAnimation = IDLE;
 				lastAnimating = null;
+
+				// prevent interaction notifications from firing too
+				lastInteract = null;
+				lastInteracting = null;
+
 				return true;
 			}
 		}
