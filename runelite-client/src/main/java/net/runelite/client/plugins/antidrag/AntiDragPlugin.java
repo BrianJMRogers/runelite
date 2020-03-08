@@ -106,8 +106,7 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 			if (config.invert()) client.setInventoryDragDelay(config.dragDelay());
 			else {
 				client.setInventoryDragDelay(DEFAULT_DELAY);
-				// In this case, 0 is the default for bank item widgets.
-				setBankDragDelay(0);
+				setBankDragDelay(DEFAULT_DELAY);
 			}
 		}
 	}
@@ -118,7 +117,7 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 		if (!focusChanged.isFocused())
 		{
 			client.setInventoryDragDelay(DEFAULT_DELAY);
-			setBankDragDelay(0);
+			setBankDragDelay(DEFAULT_DELAY);
 		}
 	}
 
