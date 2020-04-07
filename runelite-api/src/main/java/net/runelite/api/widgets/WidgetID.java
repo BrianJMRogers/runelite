@@ -215,11 +215,27 @@ public class WidgetID
 	static class FriendList
 	{
 		static final int TITLE = 3;
+		static final int FULL_CONTAINER = 5;
+		static final int SORT_BY_NAME_BUTTON = 7;
+		static final int SORT_BY_LAST_WORLD_CHANGE_BUTTON = 8;
+		static final int SORT_BY_WORLD_BUTTON = 9;
+		static final int LEGACY_SORT_BUTTON = 10;
+		static final int NAMES_CONTAINER = 11;
+		static final int SCROLL_BAR = 12;
+		static final int LOADING_TEXT = 13;
+		static final int PREVIOUS_NAME_HOLDER = 18;
 	}
 
 	static class IgnoreList
 	{
 		static final int TITLE = 3;
+		static final int FULL_CONTAINER = 5;
+		static final int SORT_BY_NAME_BUTTON = 7;
+		static final int LEGACY_SORT_BUTTON = 8;
+		static final int NAMES_CONTAINER = 9;
+		static final int SCROLL_BAR = 10;
+		static final int LOADING_TEXT = 11;
+		static final int PREVIOUS_NAME_HOLDER = 16;
 	}
 
 	static class ClanChat
@@ -308,6 +324,7 @@ public class WidgetID
 		static final int HEALTH_ORB = 2;
 		static final int PRAYER_ORB = 12;
 		static final int QUICK_PRAYER_ORB = 14; // Has the "Quick-prayers" name
+		static final int PRAYER_ORB_TEXT = 15;
 		static final int RUN_ORB = 20;
 		static final int TOGGLE_RUN_ORB = 22; // Has the "Toggle run" name
 		static final int RUN_ORB_TEXT = 23;
@@ -449,6 +466,7 @@ public class WidgetID
 		static final int CONTAINER = 40;
 		static final int TITLE = 44;
 		static final int FULL_INPUT = 45;
+		static final int GE_SEARCH_RESULTS = 53;
 		static final int MESSAGES = 55;
 		static final int TRANSPARENT_BACKGROUND_LINES = 56;
 		static final int INPUT = 57;
@@ -852,6 +870,7 @@ public class WidgetID
 
 	static class Options
 	{
+		static final int CAMERA_ZOOM_SLIDER_HANDLE = 15;
 		static final int MUSIC_SLIDER = 37;
 		static final int SOUND_EFFECT_SLIDER = 43;
 		static final int AREA_SOUND_SLIDER = 49;
