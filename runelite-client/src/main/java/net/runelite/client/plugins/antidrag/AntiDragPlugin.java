@@ -28,35 +28,47 @@ import com.google.inject.Provides;
 import java.awt.event.KeyEvent;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.Varbits;
 import net.runelite.api.events.FocusChanged;
+import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
-	name = "Shift Anti Drag",
-	description = "Prevent dragging an item for a specified delay. " +
-			"Inverted from reguler RuneLite. Hold shift to drag your inventory, " +
-			"hold nothing to use the anti-drag. Click shift to initiate",
-	tags = {"antidrag", "delay", "inventory", "items"}
+	name = "Anti Drag",
+	description = "Prevent dragging an item for a specified delay",
+	tags = {"antidrag", "delay", "inventory", "items"},
+	enabledByDefault = false
 )
 public class AntiDragPlugin extends Plugin implements KeyListener
 {
+	static final String CONFIG_GROUP = "antiDrag";
+
 	private static final int DEFAULT_DELAY = 5;
 
 	@Inject
 	private Client client;
 
 	@Inject
+	private ClientThread clientThread;
+
+	@Inject
 	private AntiDragConfig config;
 
 	@Inject
 	private KeyManager keyManager;
+
 
 	@Provides
 	AntiDragConfig getConfig(ConfigManager configManager)
@@ -67,13 +79,24 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	@Override
 	protected void startUp() throws Exception
 	{
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			clientThread.invokeLater(() ->
+			{
+				if (!config.onShiftOnly())
+				{
+					setDragDelay();
+				}
+			});
+		}
+
 		keyManager.registerKeyListener(this);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		client.setInventoryDragDelay(DEFAULT_DELAY);
+		clientThread.invoke(this::resetDragDelay);
 		keyManager.unregisterKeyListener(this);
 	}
 
@@ -86,38 +109,57 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT && config.onShiftOnly())
 		{
-			if (config.invert()) {
-				client.setInventoryDragDelay(DEFAULT_DELAY);
-			} else {
-				final int delay = config.dragDelay();
-				client.setInventoryDragDelay(delay);
-				setBankDragDelay(delay);
-			}
+			setDragDelay();
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT && config.onShiftOnly())
 		{
-			if (config.invert()) client.setInventoryDragDelay(config.dragDelay());
-			else {
-				client.setInventoryDragDelay(DEFAULT_DELAY);
-				setBankDragDelay(DEFAULT_DELAY);
+			resetDragDelay();
+		}
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (event.getGroup().equals(CONFIG_GROUP))
+		{
+			if (config.onShiftOnly())
+			{
+				clientThread.invoke(this::resetDragDelay);
+			}
+			else
+			{
+				clientThread.invoke(this::setDragDelay);
 			}
 		}
 	}
+
 
 	@Subscribe
 	public void onFocusChanged(FocusChanged focusChanged)
 	{
 		if (!focusChanged.isFocused())
 		{
-			client.setInventoryDragDelay(DEFAULT_DELAY);
-			setBankDragDelay(DEFAULT_DELAY);
+			clientThread.invoke(this::resetDragDelay);
+		}
+		else if (!config.onShiftOnly())
+		{
+			clientThread.invoke(this::setDragDelay);
+		}
+	}
+
+	@Subscribe
+	public void onWidgetLoaded(WidgetLoaded widgetLoaded)
+	{
+		if (widgetLoaded.getGroupId() == WidgetID.BANK_GROUP_ID)
+		{
+			setBankDragDelay(config.dragDelay());
 		}
 	}
 
@@ -132,6 +174,18 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 				item.setDragDeadTime(delay);
 			}
 		}
+	}
+
+	private void setDragDelay()
+	{
+		client.setInventoryDragDelay(config.dragDelay());
+		setBankDragDelay(config.dragDelay());
+	}
+
+	private void resetDragDelay()
+	{
+		client.setInventoryDragDelay(DEFAULT_DELAY);
+		setBankDragDelay(DEFAULT_DELAY);
 	}
 
 }

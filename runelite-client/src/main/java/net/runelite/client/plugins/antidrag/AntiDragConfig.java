@@ -29,7 +29,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("antiDrag")
+@ConfigGroup(AntiDragPlugin.CONFIG_GROUP)
 public interface AntiDragConfig extends Config
 {
 	@ConfigItem(
@@ -44,13 +44,12 @@ public interface AntiDragConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "invert",
-			name = "Invert",
-			description = "Inverts whether shift allows or stops dragging",
+			keyName = "onShiftOnly",
+			name = "On Shift Only",
+			description = "Configures whether to only adjust the delay while holding shift. Required for anti drag in PvP scenarios.",
 			position = 2
 	)
-	default boolean invert()
-	{
-		return false; // default off
+	default boolean onShiftOnly() {
+		return true;
 	}
 }

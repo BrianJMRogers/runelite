@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Adam <Adam@sigterm.info>
+ * Copyright (c) 2020, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,21 +22,21 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.http.api.item;
+package net.runelite.client.plugins.grandexchange;
 
+import java.util.Arrays;
 import java.util.List;
+import static net.runelite.client.plugins.grandexchange.GrandExchangePlugin.findFuzzyIndices;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-public class SearchResult
+public class GrandExchangePluginTest
 {
-	private List<Item> items;
-
-	public List<Item> getItems()
+	@Test
+	public void testFindFuzzyIndices()
 	{
-		return items;
-	}
-
-	public void setItems(List<Item> items)
-	{
-		this.items = items;
+		List<Integer> fuzzyIndices = findFuzzyIndices("Ancestral robe bottom", "obby");
+		// r<u>ob</u>e <u>b</u>ottom
+		assertEquals(Arrays.asList(11, 12, 15), fuzzyIndices);
 	}
 }

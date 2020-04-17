@@ -98,6 +98,11 @@ public class PlayerIndicatorsPlugin extends Plugin
 	@Subscribe
 	public void onClientTick(ClientTick clientTick)
 	{
+		if (client.isMenuOpen())
+		{
+			return;
+		}
+
 		MenuEntry[] menuEntries = client.getMenuEntries();
 		boolean modified = false;
 

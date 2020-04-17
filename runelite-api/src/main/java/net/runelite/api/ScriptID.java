@@ -225,7 +225,7 @@ public final class ScriptID
 	/**
 	 * Builds the grand exchange item search widget
 	 */
-	@ScriptArguments(integer = 2)
+	@ScriptArguments(integer = 3)
 	public static final int GE_ITEM_SEARCH = 752;
 
 	/**
@@ -271,4 +271,13 @@ public final class ScriptID
 	 */
 	@ScriptArguments(integer = 7)
 	public static final int IGNORE_UPDATE = 630;
+
+	/**
+	 * Called in an onTimer, determines whether to layout the bank during a search
+	 * <ul>
+	 * <li> int (WidgetID) * 16, various widgets making up the bank interface </li>
+	 * </ul>
+	 */
+	@ScriptArguments(integer = 16)
+	public static final int BANKMAIN_SEARCH_REFRESH = 283;
 }
