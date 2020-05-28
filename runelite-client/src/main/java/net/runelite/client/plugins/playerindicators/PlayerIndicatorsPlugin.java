@@ -116,17 +116,17 @@ public class PlayerIndicatorsPlugin extends Plugin
 			}
 
 			if (type == WALK.getId()
-					|| type == SPELL_CAST_ON_PLAYER.getId()
-					|| type == ITEM_USE_ON_PLAYER.getId()
-					|| type == PLAYER_FIRST_OPTION.getId()
-					|| type == PLAYER_SECOND_OPTION.getId()
-					|| type == PLAYER_THIRD_OPTION.getId()
-					|| type == PLAYER_FOURTH_OPTION.getId()
-					|| type == PLAYER_FIFTH_OPTION.getId()
-					|| type == PLAYER_SIXTH_OPTION.getId()
-					|| type == PLAYER_SEVENTH_OPTION.getId()
-					|| type == PLAYER_EIGTH_OPTION.getId()
-					|| type == RUNELITE.getId())
+				|| type == SPELL_CAST_ON_PLAYER.getId()
+				|| type == ITEM_USE_ON_PLAYER.getId()
+				|| type == PLAYER_FIRST_OPTION.getId()
+				|| type == PLAYER_SECOND_OPTION.getId()
+				|| type == PLAYER_THIRD_OPTION.getId()
+				|| type == PLAYER_FOURTH_OPTION.getId()
+				|| type == PLAYER_FIFTH_OPTION.getId()
+				|| type == PLAYER_SIXTH_OPTION.getId()
+				|| type == PLAYER_SEVENTH_OPTION.getId()
+				|| type == PLAYER_EIGTH_OPTION.getId()
+				|| type == RUNELITE_PLAYER.getId())
 			{
 				Player[] players = client.getCachedPlayers();
 				Player player = null;
