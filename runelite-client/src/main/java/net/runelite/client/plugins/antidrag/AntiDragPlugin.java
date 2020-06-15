@@ -70,6 +70,9 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	private KeyManager keyManager;
 
 	private boolean held;
+	private boolean inPvp;
+	private boolean shiftHeld;
+	private boolean ctrlHeld;
 
 	@Provides
 	AntiDragConfig getConfig(ConfigManager configManager)
@@ -110,20 +113,30 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT && config.onShiftOnly())
+		if (e.getKeyCode() == KeyEvent.VK_CONTROL && config.disableOnCtrl() && !(inPvp || config.onShiftOnly()))
+		{
+			resetDragDelay();
+			ctrlHeld = true;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_SHIFT && (inPvp || config.onShiftOnly()))
 		{
 			setDragDelay();
-			held = true;
+			shiftHeld = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT && config.onShiftOnly())
+		if (e.getKeyCode() == KeyEvent.VK_CONTROL && config.disableOnCtrl() && !(inPvp || config.onShiftOnly()))
+		{
+			setDragDelay();
+			ctrlHeld = false;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_SHIFT && (inPvp || config.onShiftOnly()))
 		{
 			resetDragDelay();
-			held = false;
+			shiftHeld = false;
 		}
 	}
 
@@ -132,9 +145,14 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	{
 		if (event.getGroup().equals(CONFIG_GROUP))
 		{
-			if (config.onShiftOnly())
+			if (!config.disableOnCtrl())
 			{
-				held = false;
+				ctrlHeld = false;
+			}
+
+			if (config.onShiftOnly() || inPvp)
+			{
+				shiftHeld = false;
 				clientThread.invoke(this::resetDragDelay);
 			}
 			else
@@ -150,7 +168,8 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	{
 		if (!focusChanged.isFocused())
 		{
-			held = false;
+			shiftHeld = false;
+			ctrlHeld = false;
 			clientThread.invoke(this::resetDragDelay);
 		}
 		else if (!config.onShiftOnly())
@@ -162,7 +181,7 @@ public class AntiDragPlugin extends Plugin implements KeyListener
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded widgetLoaded)
 	{
-		if (widgetLoaded.getGroupId() == WidgetID.BANK_GROUP_ID && (!config.onShiftOnly() || held))
+		if (widgetLoaded.getGroupId() == WidgetID.BANK_GROUP_ID && (!config.onShiftOnly() || shiftHeld) && !ctrlHeld)
 		{
 			setBankDragDelay(config.dragDelay());
 		}

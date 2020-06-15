@@ -42,7 +42,7 @@ public class WildernessUtils {
         int playersInClump = 0;
         for (Player player : client.getPlayers())
         {
-            if (!player.isClanMember() &&
+            if (!player.isFriendsChatMember() &&
                 !isTeammate(player, client) &&
                 player != opponent &&
                 isWithinClumpableDistance(opponent, player) &&

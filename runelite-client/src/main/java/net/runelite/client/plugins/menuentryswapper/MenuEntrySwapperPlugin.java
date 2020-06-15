@@ -484,7 +484,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 				swap("teleport", option, target, index);
 			}
 
-			if (config.swapHardWoodGrove() && target.contains("rionasta"))
+			if (config.swapHardWoodGroveParcel() && target.contains("rionasta"))
 			{
 				swap("send-parcel", option, target, index);
 			}
@@ -951,7 +951,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 		for (Player player : client.getPlayers())
 		{
-			if (target.contains(player.getName().toLowerCase()) && player.isClanMember())
+			if (target.contains(player.getName().toLowerCase()) && player.isFriendsChatMember())
 			{
 				return true;
 			}
